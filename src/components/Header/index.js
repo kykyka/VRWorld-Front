@@ -55,14 +55,17 @@ export const Header = () => {
         </Box>
 
         {/* Бургер-меню для мобильных экранов */}
-        <IconButton
-          sx={{ display: { xs: "block", md: "none" } }}
-          onClick={handleDrawerToggle}
-          color="primary"
-          aria-label="Меню"
-        >
-          <MenuIcon />
-        </IconButton>
+        <Box sx={{ display: { xs: "block", md: "none" } }}>
+          <IconButton
+            onClick={handleDrawerToggle}
+            color="primary"
+            aria-label="Меню"
+          >
+            <MenuIcon />
+          </IconButton>
+
+          <LanguagePopover />
+        </Box>
       </Toolbar>
 
       {/* Мобильное меню (Drawer) */}
