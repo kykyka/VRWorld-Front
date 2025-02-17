@@ -3,8 +3,10 @@ import { AppBar, Toolbar, Box, Drawer, IconButton } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import { useTranslation } from "react-i18next";
 
 export const Header = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -35,17 +37,17 @@ export const Header = () => {
         />
         {/* Навигация для больших экранов */}
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
-          <NavLink to="/" style={linkStyle} aria-label="Главная">
-            Главная
+          <NavLink to="/" style={linkStyle} aria-label={t("home")}>
+            {t("home")}
           </NavLink>
-          <NavLink to="/games" style={linkStyle} aria-label="Наши игры">
-            Наши игры
+          <NavLink to="/games" style={linkStyle} aria-label={t("games")}>
+            {t("games")}
           </NavLink>
-          <NavLink to="/pricing" style={linkStyle} aria-label="Цены">
-            Цены
+          <NavLink to="/pricing" style={linkStyle} aria-label={t("pricing")}>
+            {t("pricing")}
           </NavLink>
-          <NavLink to="/booking" style={linkStyle} aria-label="Бронировать">
-            Бронировать
+          <NavLink to="/booking" style={linkStyle} aria-label={t("book")}>
+            {t("book")}
           </NavLink>
         </Box>
 
@@ -104,33 +106,33 @@ export const Header = () => {
             to="/"
             style={linkStyle}
             onClick={handleDrawerToggle}
-            aria-label="Главная"
+            aria-label={t("home")}
           >
-            Главная
+            {t("home")}
           </NavLink>
           <NavLink
             to="/games"
             style={linkStyle}
             onClick={handleDrawerToggle}
-            aria-label="Наши игры"
+            aaria-label={t("games")}
           >
-            Наши игры
+            {t("games")}
           </NavLink>
           <NavLink
             to="/pricing"
             style={linkStyle}
             onClick={handleDrawerToggle}
-            aria-label="Цены"
+            aria-label={t("pricing")}
           >
-            Цены
+            {t("pricing")}
           </NavLink>
           <NavLink
             to="/booking"
             style={linkStyle}
             onClick={handleDrawerToggle}
-            aria-label="Бронировать"
+            aaria-label={t("book")}
           >
-            Бронировать
+            {t("book")}
           </NavLink>
         </Box>
       </Drawer>
