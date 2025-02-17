@@ -4,10 +4,10 @@ export const theme = createTheme({
   shadows: ["none"],
   palette: {
     primary: {
-      main: "#d6dbe4",
+      main: "#d6dbe4", // white
     },
     secondary: {
-      main: "#d3bb8a",
+      main: "#d3bb8a", // brown
     },
     background: {
       default: "#0f1621", // black
@@ -23,5 +23,6 @@ export const theme = createTheme({
       textTransform: "none",
       fontWeight: 500,
     },
+    fontFamily: "Work Sans",
   },
 });
