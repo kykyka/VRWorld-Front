@@ -1,3 +1,5 @@
+import Typography from "@mui/material/Typography";
+
 export const Header = () => {
-  return <div>Header</div>;
+  return <Typography>Header</Typography>;
 };

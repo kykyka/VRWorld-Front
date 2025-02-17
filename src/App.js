@@ -8,7 +8,12 @@ function App() {
   return (
     <>
       <Header />
-      <Container maxWidth="lg">
+      <Container
+        maxWidth="lg"
+        sx={{
+          backgroundColor: "background.default",
+        }}
+      >
         <Routes>
           <Route path="/" element={<Home />} />
           {/* <Route path="/posts/:id" element={<FullPost />} />
