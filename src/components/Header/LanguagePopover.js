@@ -73,7 +73,7 @@ const LanguagePopover = () => {
         onClose={handleClose}
         open={open}
         PaperProps={{
-          sx: { width: 240 },
+          sx: { width: 240, backgroundColor: "background.light" },
         }}
       >
         {Object.keys(languageOptions).map((language) => (
@@ -100,7 +100,10 @@ const LanguagePopover = () => {
             </ListItemIcon>
             <ListItemText
               primary={
-                <Typography color="textPrimary" variant="subtitle2">
+                <Typography
+                  sx={{ color: "text.secondary" }}
+                  variant="subtitle2"
+                >
                   {languageOptions[language].label}
                 </Typography>
               }

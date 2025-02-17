@@ -26,7 +26,7 @@ export const Header = () => {
   return (
     <AppBar
       position="static"
-      sx={{ backgroundColor: "#121212", padding: "10px 20px" }}
+      sx={{ backgroundColor: "background.default", padding: "10px 20px" }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         {/* Логотип */}
@@ -64,7 +64,6 @@ export const Header = () => {
           <MenuIcon />
         </IconButton>
       </Toolbar>
-      
 
       {/* Мобильное меню (Drawer) */}
       <Drawer
