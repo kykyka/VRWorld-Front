@@ -5,6 +5,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTranslation } from "react-i18next";
 
+import LanguagePopover from "./LanguagePopover";
+
 export const Header = () => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -49,6 +51,7 @@ export const Header = () => {
           <NavLink to="/booking" style={linkStyle} aria-label={t("book")}>
             {t("book")}
           </NavLink>
+          <LanguagePopover />
         </Box>
 
         {/* Бургер-меню для мобильных экранов */}
@@ -61,6 +64,7 @@ export const Header = () => {
           <MenuIcon />
         </IconButton>
       </Toolbar>
+      
 
       {/* Мобильное меню (Drawer) */}
       <Drawer
