@@ -1,6 +1,17 @@
 {
+  "quick_links": "Schnellzugriff",
   "home": "Startseite",
   "games": "Spiele",
   "pricing": "Preise",
-  "book": "Buchen"
+  "book": "Buchung",
+  "contacts": "Kontakte",
+  "working_hours": "Öffnungszeiten",
+  "mon_fri": "Montag - Freitag",
+  "sat_sun": "Samstag - Sonntag",
+  "our_address": "Unsere Adresse",
+  "address_line1": "VR Arena Berlin",
+  "address_line2": "Alexanderplatz 1, 10178 Berlin, Deutschland",
+  "view_on_map": "Auf Google Maps ansehen",
+  "find_us": "Finde uns",
+  "all_rights_reserved": "Alle Rechte vorbehalten"
 }
