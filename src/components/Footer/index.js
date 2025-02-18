@@ -115,25 +115,25 @@ export const Footer = () => {
               display: "flex",
               gap: 2,
               marginTop: "10px",
-              justifyContent: "center",
+              // justifyContent: "center",
             }}
           >
             <IconButton
-              href="https://www.instagram.com/emperiavr"
+              href="https://www.instagram.com/VRWorld"
               target="_blank"
               sx={socialMediaStyle}
             >
               <InstagramIcon />
             </IconButton>
             <IconButton
-              href="https://www.facebook.com/emperiavr"
+              href="https://www.facebook.com/VRWorld"
               target="_blank"
               sx={socialMediaStyle}
             >
               <FacebookIcon />
             </IconButton>
             <IconButton
-              href="https://www.youtube.com/emperiavr"
+              href="https://www.youtube.com/VRWorld"
               target="_blank"
               sx={socialMediaStyle}
             >
@@ -148,7 +148,7 @@ export const Footer = () => {
         variant="body2"
         sx={{ marginTop: "20px", opacity: 0.6, textAlign: "center" }}
       >
-        &copy; {new Date().getFullYear()} EmperiaVR. {t("all_rights_reserved")}
+        &copy; {new Date().getFullYear()} VRWorld. {t("all_rights_reserved")}
       </Typography>
     </Box>
   );
