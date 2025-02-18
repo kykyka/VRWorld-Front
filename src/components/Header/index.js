@@ -36,7 +36,7 @@ export const Header = () => {
           component="img"
           src="/static/imgs/logo.png"
           alt="VR Logo"
-          sx={{ width: 50, cursor: "pointer" }}
+          sx={{ width: 75, cursor: "pointer" }}
           onClick={() => (window.location.href = "/")}
         />
         {/* Навигация для больших экранов */}
