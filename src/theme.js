@@ -21,7 +21,7 @@ export const theme = createTheme({
   },
   typography: {
     button: {
-      textTransform: "none",
+      textTransform: "uppercase",
       fontWeight: 500,
     },
     fontFamily: "Work Sans",

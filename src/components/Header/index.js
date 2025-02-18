@@ -17,8 +17,10 @@ export const Header = () => {
 
   const linkStyle = ({ isActive }) => ({
     textDecoration: "none",
+    textTransform: "uppercase",
     color: isActive ? "#d3bb8a" : "#d6dbe4",
     fontSize: "18px",
+    fontWeight: 400,
     transition: "color 0.3s",
     margin: "10px 0", // Для мобильной версии добавляем отступ
   });
