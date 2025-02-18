@@ -34,7 +34,7 @@ export const Header = () => {
         {/* Логотип */}
         <Box
           component="img"
-          src="/logo.png"
+          src="/static/imgs/logo.png"
           alt="VR Logo"
           sx={{ width: 50, cursor: "pointer" }}
           onClick={() => (window.location.href = "/")}
