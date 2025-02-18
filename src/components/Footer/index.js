@@ -17,6 +17,12 @@ export const Footer = () => {
     "&:hover": { color: "#d3bb8a" },
   };
 
+  const socialMediaStyle = {
+    color: "#d6dbe4",
+    "&:hover": { color: "#d3bb8a", transform: "scale(1.2)" },
+    transition: "transform 0.3s ease",
+  };
+
   return (
     <Box
       component="footer"
@@ -115,21 +121,21 @@ export const Footer = () => {
             <IconButton
               href="https://www.instagram.com/emperiavr"
               target="_blank"
-              sx={{ color: "#d6dbe4", "&:hover": { color: "#d3bb8a" } }}
+              sx={socialMediaStyle}
             >
               <InstagramIcon />
             </IconButton>
             <IconButton
               href="https://www.facebook.com/emperiavr"
               target="_blank"
-              sx={{ color: "#d6dbe4", "&:hover": { color: "#d3bb8a" } }}
+              sx={socialMediaStyle}
             >
               <FacebookIcon />
             </IconButton>
             <IconButton
               href="https://www.youtube.com/emperiavr"
               target="_blank"
-              sx={{ color: "#d6dbe4", "&:hover": { color: "#d3bb8a" } }}
+              sx={socialMediaStyle}
             >
               <YouTubeIcon />
             </IconButton>
