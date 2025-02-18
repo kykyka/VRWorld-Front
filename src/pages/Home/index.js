@@ -1,10 +1,10 @@
-import Button from "@mui/material/Button";
+import { Box } from "@mui/material";
+import HeroSection from "../../components/Home/HeroSection";
 
 export const Home = () => {
   return (
-    <>
-      <div>Home</div>
-      <Button variant="contained" color="secondary"> TEST</Button>
-    </>
+    <Box>
+      <HeroSection />
+    </Box>
   );
 };

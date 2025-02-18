@@ -9,7 +9,8 @@ function App() {
     <>
       <Header />
       <Container
-        maxWidth="lg"
+        maxWidth={false}
+        disableGutters
         sx={{
           backgroundColor: "background.default",
         }}
