@@ -29,13 +29,13 @@ export const Footer = () => {
       sx={{
         backgroundColor: "background.default",
         color: "text.primary",
-        padding: "40px 20px",
+        padding: "40px 40px",
         textAlign: "left",
       }}
     >
       <Grid container spacing={4} justifyContent="start">
         {/* Навигация */}
-        <Grid item xs={12} md={3} sx={{ paddingBottom: { xs: 3, md: 0 } }}>
+        <Grid item xs={12} md={2} sx={{ paddingBottom: { xs: 3, md: 0 } }}>
           <Typography variant="h6" sx={{ marginBottom: "10px" }}>
             {t("quick_links")}
           </Typography>
@@ -84,15 +84,15 @@ export const Footer = () => {
         </Grid>
 
         {/* Google Карта + Соцсети */}
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={4}>
           <Typography variant="h6" sx={{ marginBottom: "10px" }}>
             {t("find_us")}
           </Typography>
           <Box
             sx={{
               width: "100%",
-              maxWidth: "350px",
-              height: "200px",
+              maxWidth: "600px",
+              height: "250px",
               borderRadius: "10px",
               overflow: "hidden",
             }}
