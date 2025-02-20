@@ -40,6 +40,7 @@ const LanguagePopover = () => {
 
   const handleChangeLanguage = (language) => {
     i18n.changeLanguage(language);
+    localStorage.setItem("i18nextLng", language);
     setOpen(false);
   };
 
