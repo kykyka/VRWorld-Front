@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppBar, Toolbar, Box, Drawer, IconButton } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -10,6 +10,20 @@ import LanguagePopover from "./LanguagePopover";
 export const Header = () => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -20,15 +34,20 @@ export const Header = () => {
     textTransform: "uppercase",
     color: isActive ? "#d3bb8a" : "#d6dbe4",
     fontSize: "18px",
-    fontWeight: 400,
+    fontWeight: 700,
     transition: "color 0.3s",
-    margin: "10px 0", // Для мобильной версии добавляем отступ
+    margin: "10px 0",
   });
 
   return (
     <AppBar
       position="sticky"
-      sx={{ backgroundColor: "background.default", padding: "10px 20px" }}
+      sx={{
+        backgroundColor: scrolled ? "rgba(0, 0, 0, 0.4)" : "background.default",
+        backdropFilter: scrolled ? "blur(10px)" : "none",
+        transition: "all 0.3s ease-in-out",
+        padding: "10px 20px",
+      }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         {/* Логотип */}
