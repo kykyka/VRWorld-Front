@@ -36,7 +36,10 @@ export const Footer = () => {
       <Grid container spacing={4} justifyContent="start">
         {/* Навигация */}
         <Grid item xs={12} md={2} sx={{ paddingBottom: { xs: 3, md: 0 } }}>
-          <Typography variant="h6" sx={{ marginBottom: "10px" }}>
+          <Typography
+            variant="h6"
+            sx={{ marginBottom: "10px", color: "#47505f" }}
+          >
             {t("quick_links")}
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
@@ -57,7 +60,10 @@ export const Footer = () => {
 
         {/* График работы */}
         <Grid item xs={12} md={3} sx={{ paddingBottom: { xs: 3, md: 0 } }}>
-          <Typography variant="h6" sx={{ marginBottom: "10px" }}>
+          <Typography
+            variant="h6"
+            sx={{ marginBottom: "10px", color: "#47505f" }}
+          >
             {t("working_hours")}
           </Typography>
           <Box>
@@ -68,7 +74,10 @@ export const Footer = () => {
 
         {/* Адрес + Контакты */}
         <Grid item xs={12} md={3} sx={{ paddingBottom: { xs: 3, md: 0 } }}>
-          <Typography variant="h6" sx={{ marginBottom: "10px" }}>
+          <Typography
+            variant="h6"
+            sx={{ marginBottom: "10px", color: "#47505f" }}
+          >
             {t("our_address")}
           </Typography>
           <Typography>{t("address_line1")}</Typography>
@@ -85,7 +94,10 @@ export const Footer = () => {
 
         {/* Google Карта + Соцсети */}
         <Grid item xs={12} md={4}>
-          <Typography variant="h6" sx={{ marginBottom: "10px" }}>
+          <Typography
+            variant="h6"
+            sx={{ marginBottom: "10px", color: "#47505f" }}
+          >
             {t("find_us")}
           </Typography>
           <Box
