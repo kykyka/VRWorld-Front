@@ -2,7 +2,7 @@ import Container from "@mui/material/Container";
 import { Routes, Route } from "react-router-dom";
 
 import { Header, Footer } from "./components";
-import { Home } from "./pages";
+import { Home, Booking } from "./pages";
 
 function App() {
   return (
@@ -17,6 +17,7 @@ function App() {
       >
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/booking" element={<Booking />} />
         </Routes>
       </Container>
       <Footer />
