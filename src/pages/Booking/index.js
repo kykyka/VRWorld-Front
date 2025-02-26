@@ -30,7 +30,7 @@ export const Booking = () => {
       try {
         const dateStr = selectedDate.format("YYYY-MM-DD");
         const baseURL =
-          process.env.REACT_APP_BASE_URL || "http://localhost:3000";
+          process.env.REACT_APP_BASE_URL || "http://localhost:8000";
         const response = await fetch(`${baseURL}/day/${dateStr}`);
 
         if (!response.ok) {
@@ -104,7 +104,7 @@ export const Booking = () => {
     };
 
     try {
-      const baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:3000";
+      const baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:8000";
       const response = await fetch(`${baseURL}/day/${bookingData.date}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
