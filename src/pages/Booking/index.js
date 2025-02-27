@@ -28,7 +28,7 @@ export const Booking = () => {
   const [success, setSuccess] = React.useState(false);
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [bookings, setBookings] = useState([]);
-  const [selectedTimes, setSelectedTimes] = useState({}); // Объект для хранения выбранных интервалов по ID устройств
+  const [selectedTimes, setSelectedTimes] = useState({});
   const [availableHours, setAvailableHours] = useState({});
   const [userDetails, setUserDetails] = useState({
     name: "",
@@ -36,20 +36,17 @@ export const Booking = () => {
     email: "",
   });
 
-  const currentLang = localStorage.getItem("i18nextLng") || "de"; // По умолчанию английский
+  const currentLang = localStorage.getItem("i18nextLng") || "de";
 
-  // Устанавливаем локаль для dayjs
   useEffect(() => {
-    dayjs.locale(currentLang); // Устанавливаем локаль для корректного форматирования дат
+    dayjs.locale(currentLang);
   }, [currentLang]);
 
-  // Генерация timeSlots на основе availableHours
   const timeSlots = Array.from(
     { length: availableHours.to - availableHours.from },
     (_, i) => availableHours.from + i
   );
 
-  // Получение данных с API или использование mock данных при ошибке
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -68,7 +65,6 @@ export const Booking = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data, using mock data:", error);
-        // Mock данные при ошибке
         const mockResponse = {
           data: {
             available_hours: { from: 10, to: 20 },
@@ -88,13 +84,11 @@ export const Booking = () => {
     fetchData();
   }, [selectedDate]);
 
-  // Проверка занятости слота для конкретного устройства
   const isTimeSlotBooked = (deviceId, hour) => {
     const device = bookings.find((d) => d.id === deviceId);
     return device ? device.reservations.includes(hour) : false;
   };
 
-  // Обработка выбора/снятия выбора интервала
   const handleTimeSlotToggle = (deviceId, hour) => {
     setSelectedTimes((prev) => {
       const currentSelections = prev[deviceId] || [];
@@ -113,7 +107,6 @@ export const Booking = () => {
     });
   };
 
-  // Обработка бронирования с проверкой обязательного поля name
   const handleBooking = async () => {
     if (!bookIsLoading) {
       setSuccess(false);
@@ -133,7 +126,7 @@ export const Booking = () => {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(userDetails.email)) {
-      alert(t("invalidEmail")); // Добавить ключ "invalidEmail" в переводы
+      alert(t("invalidEmail"));
       setBookIsLoading(false);
       return;
     }
@@ -142,7 +135,7 @@ export const Booking = () => {
       date: selectedDate.format("YYYY-MM-DD"),
       name: userDetails.name,
       description: userDetails.description,
-      email: userDetails.email, // Добавляем количество игроков
+      email: userDetails.email,
       reservations: selectedTimes,
     };
 
@@ -160,10 +153,24 @@ export const Booking = () => {
       }
 
       const result = await response.json();
-      setBookings(result.data.devices || bookings);
-      setSelectedTimes({});
-      setUserDetails({ name: "", description: "", email: "" }); // Сбрасываем с начальным значением для email
-      setSuccess(true);
+      if (result.success) {
+        // Обновляем состояние bookings, добавляя выбранные слоты в reservations
+        setBookings((prevBookings) =>
+          prevBookings.map((device) => {
+            const selectedHours = selectedTimes[device.id] || [];
+            if (selectedHours.length > 0) {
+              return {
+                ...device,
+                reservations: [...device.reservations, ...selectedHours],
+              };
+            }
+            return device;
+          })
+        );
+        setSelectedTimes({});
+        setUserDetails({ name: "", description: "", email: "" });
+        setSuccess(true);
+      }
       setBookIsLoading(false);
     } catch (error) {
       console.error("Booking error:", error);
@@ -207,7 +214,7 @@ export const Booking = () => {
         <Typography
           variant="h6"
           sx={{
-            color: "#d3bb8a", // Цвет акцента из темы
+            color: "#d3bb8a",
             fontWeight: "bold",
           }}
         >
@@ -215,7 +222,6 @@ export const Booking = () => {
         </Typography>
       </Box>
 
-      {/* Датапикер с локализацией и стилями */}
       <Box
         sx={{
           display: "flex",
@@ -283,14 +289,13 @@ export const Booking = () => {
                     },
                   },
                   "& .MuiPickersDay-root.Mui-disabled": {
-                    color: "grey !important", // Серый цвет для недоступных дат
+                    color: "grey !important",
                   },
                   "& .MuiPickersCalendarHeader-label": {
                     color: "text.primary",
                   },
                   "& .MuiIconButton-root": {
-                    // Стили для стрелок переключения месяцев
-                    color: "text.primary", // Светлый цвет стрелок
+                    color: "text.primary",
                     "&:hover": {
                       backgroundColor: "rgba(255, 255, 255, 0.1)",
                     },
@@ -298,8 +303,7 @@ export const Booking = () => {
                 },
               },
             }}
-            renderInput={(params) => <TextField {...params} />}
-            minDate={dayjs()} // Ограничение минимальной даты на сегодняLocalizationProvider
+            minDate={dayjs()}
           />
         </LocalizationProvider>
         <IconButton
@@ -314,9 +318,8 @@ export const Booking = () => {
             "&.Mui-disabled": {
               color: "rgba(255, 255, 255, 0.3)",
             },
-            // Корректировка смещения для ArrowBackIosIcon
             "& .MuiSvgIcon-root": {
-              transform: "translateX(4px)", // Смещаем вправо, чтобы выровнять по центру
+              transform: "translateX(4px)",
             },
           }}
         >
@@ -330,9 +333,8 @@ export const Booking = () => {
               backgroundColor: "rgba(255, 255, 255, 0.1)",
               color: "text.tertiary",
             },
-            // Корректировка смещения для ArrowForwardIosIcon
             "& .MuiSvgIcon-root": {
-              transform: "translateX(1px)", // Смещаем влево, чтобы выровнять по центру
+              transform: "translateX(1px)",
             },
           }}
         >
@@ -354,13 +356,12 @@ export const Booking = () => {
         </Box>
       ) : (
         <>
-          {/* Сетка временных интервалов для каждого устройства */}
           <Box sx={{ mb: 4 }}>
             <Grid container spacing={2}>
               {bookings.map((device) => (
                 <Grid item xs={12} md={3} key={device.id}>
                   <Typography variant="h6" sx={{ mb: 2 }}>
-                    {device.name} {/* Название из ответа сервера */}
+                    {device.name}
                   </Typography>
                   {timeSlots.map((hour) => {
                     const isBooked = isTimeSlotBooked(device.id, hour);
@@ -372,37 +373,43 @@ export const Booking = () => {
                       <Button
                         key={hour}
                         variant="outlined"
+                        disabled={isBooked}
                         onClick={() => handleTimeSlotToggle(device.id, hour)}
                         sx={{
                           mr: 1,
                           mb: 1,
                           width: "80px",
                           backgroundColor: isBooked
-                            ? "rgba(255, 99, 71, 0.2)" // Светло-красный для занятых
+                            ? "rgba(255, 99, 71, 0.2)"
                             : isSelected
-                            ? "#d3bb8a" // Фон выбранного (коричневый, как в теме)
-                            : "rgba(255, 255, 255, 0.1)", // Прозрачный фон для свободных
+                            ? "#d3bb8a"
+                            : "rgba(255, 255, 255, 0.1)",
                           color: isSelected
-                            ? "#0f1621" // Текст выбранного (черный, как фон темы)
+                            ? "#0f1621"
                             : isBooked
-                            ? "text.primary" // Белый текст для занятых
-                            : "text.primary", // Белый текст для свободных
+                            ? "text.primary"
+                            : "text.primary",
                           borderColor: isBooked
-                            ? "rgba(255, 99, 71, 0.5)" // Обводка для занятых
-                            : "text.secondary", // Черная обводка для свободных/выбранных
+                            ? "rgba(255, 99, 71, 0.5)"
+                            : "text.secondary",
                           "&:hover": {
                             backgroundColor: isBooked
-                              ? "rgba(255, 99, 71, 0.3)" // Более светлый красный при наведении на занятые
+                              ? "rgba(255, 99, 71, 0.3)"
                               : isSelected
-                              ? "#b89f6e" // Более темный коричневый при наведении на выбранные
-                              : "background.default", // Темный при наведении на свободные
+                              ? "#b89f6e"
+                              : "background.default",
                             borderColor: isBooked
                               ? "rgba(255, 99, 71, 0.5)"
                               : isSelected
-                              ? "#b89f6e" // Более темный коричневый при наведении на выбранные
-                              : "rgba(255, 255, 255, 0.1)", // Прозрачный фон для свободных,
+                              ? "#b89f6e"
+                              : "rgba(255, 255, 255, 0.1)",
                           },
-                          disabled: isBooked, // Отключаем нажатие на занятые интервалы
+                          "&.Mui-disabled": {
+                            backgroundColor: "rgba(255, 99, 71, 0.2)", // Сохраняем красный фон
+                            color: "text.primary", // Сохраняем цвет текста
+                            opacity: 1, // Убираем затемнение (по умолчанию opacity уменьшается)
+                            borderColor: "rgba(255, 99, 71, 0.5)", // Сохраняем обводку
+                          }, // Отключаем нажатие на забронированные слоты
                         }}
                       >
                         {hour}:00
@@ -414,7 +421,6 @@ export const Booking = () => {
             </Grid>
           </Box>
 
-          {/* Контейнер с формой, описанием и деталями заказа (по центру) */}
           <Box
             sx={{
               maxWidth: "1200px",
@@ -428,7 +434,7 @@ export const Booking = () => {
             <Box sx={{ width: "100%", maxWidth: "500px" }}>
               <TextField
                 fullWidth
-                required // Делаем поле обязательным
+                required
                 placeholder={t("fullName")}
                 value={userDetails.name}
                 onChange={(e) =>
@@ -509,7 +515,6 @@ export const Booking = () => {
                   },
                 }}
               />
-
               <Typography
                 variant="caption"
                 sx={{
@@ -525,7 +530,6 @@ export const Booking = () => {
               </Typography>
             </Box>
 
-            {/* Отображение выбранной брони (показывается только при выборе) */}
             {Object.keys(selectedTimes).length > 0 && (
               <Box
                 sx={{
@@ -561,7 +565,6 @@ export const Booking = () => {
             )}
           </Box>
 
-          {/* Кнопка под yourBooking */}
           <Box
             sx={{
               width: 1,
