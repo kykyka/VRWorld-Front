@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, Typography, Button, Container } from "@mui/material";
+import { Box, Typography, Container } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import MainButton from "../Buttons/MainButton";
 
 const HeroSection = () => {
   const { t } = useTranslation();
@@ -72,17 +73,7 @@ const HeroSection = () => {
         >
           {t("homeSubtitle")}
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          sx={{
-            backgroundColor: "#d3bb8a",
-            "&:hover": { backgroundColor: "#b89f6e" },
-          }}
-        >
-          {t("homeButtonBook")}
-        </Button>
+        <MainButton>{t("homeButtonBook")}</MainButton>
       </Container>
     </Box>
   );

@@ -7,6 +7,7 @@ import {
   TextField,
   IconButton,
 } from "@mui/material";
+import MainButton from "../../components/Buttons/MainButton";
 import { green } from "@mui/material/colors";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -569,15 +570,13 @@ export const Booking = () => {
               position: "relative",
             }}
           >
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleBooking}
+            <MainButton
               sx={buttonSx}
+              onClick={handleBooking}
               disabled={bookIsLoading}
             >
               {success ? t("bookingSuccess") : t("confirmBooking")}
-            </Button>
+            </MainButton>
             {bookIsLoading && (
               <GradientCircularProgress
                 size={24}
