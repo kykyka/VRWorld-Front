@@ -13,6 +13,9 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useTranslation } from "react-i18next";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import "dayjs/locale/de";
+import "dayjs/locale/ru";
+import "dayjs/locale/en";
 import dayjs from "dayjs";
 
 export const Booking = () => {
@@ -26,6 +29,13 @@ export const Booking = () => {
     description: "",
     email: "",
   });
+
+  const currentLang = localStorage.getItem("i18nextLng") || "de"; // По умолчанию английский
+
+  // Устанавливаем локаль для dayjs
+  useEffect(() => {
+    dayjs.locale(currentLang); // Устанавливаем локаль для корректного форматирования дат
+  }, [currentLang]);
 
   // Генерация timeSlots на основе availableHours
   const timeSlots = Array.from(
@@ -161,7 +171,7 @@ export const Booking = () => {
       >
         <LocalizationProvider
           dateAdapter={AdapterDayjs}
-          adapterLocale={t("dateLocale") || "en"} // Локализация даты
+          adapterLocale={currentLang}
         >
           <DatePicker
             value={selectedDate}
