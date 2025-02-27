@@ -151,85 +151,121 @@ export const Booking = () => {
       <Typography variant="subtitle1">{t("locationName")}</Typography>
 
       {/* Датапикер с локализацией и стилями */}
-      <LocalizationProvider
-        dateAdapter={AdapterDayjs}
-        adapterLocale={t("dateLocale") || "en"} // Локализация даты
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          mb: 2,
+        }}
       >
-        <DatePicker
-          value={selectedDate}
-          onChange={(newDate) => setSelectedDate(newDate)}
-          format={"DD.MM.YYYY"}
-          slots={{
-            textField: (params) => (
-              <TextField
-                {...params}
-                sx={{
-                  mb: 2,
-                  "& .MuiInputBase-root": {
-                    backgroundColor: "background.light",
-                    color: "text.secondary",
-                    borderRadius: 1,
-                    height: "40px",
-                  },
-                  "& .MuiInputBase-input": {
-                    color: "text.secondary",
-                    py: 1,
-                  },
-                  "& .MuiOutlinedInput-notchedOutline": {
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          adapterLocale={t("dateLocale") || "en"} // Локализация даты
+        >
+          <DatePicker
+            value={selectedDate}
+            onChange={(newDate) => setSelectedDate(newDate)}
+            format={"DD.MM.YYYY"}
+            slots={{
+              textField: (params) => (
+                <TextField
+                  {...params}
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      backgroundColor: "background.light",
+                      color: "text.secondary",
+                      borderRadius: 1,
+                      height: "40px",
+                    },
+                    "& .MuiInputBase-input": {
+                      color: "text.secondary",
+                      py: 1,
+                    },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "text.secondary",
+                    },
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "text.tertiary",
+                    },
+                    "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "#d3bb8a",
+                    },
+                  }}
+                />
+              ),
+            }}
+            slotProps={{
+              popper: {
+                sx: {
+                  "& .MuiPaper-root": {
+                    backgroundColor: "background.default",
+                    color: "text.primary",
+                    border: "1px solid",
                     borderColor: "text.secondary",
                   },
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "text.tertiary",
+                  "& .MuiPickersDay-root": {
+                    color: "text.primary",
+                    "&:hover": {
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    },
                   },
-                  "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#d3bb8a",
+                  "& .MuiPickersDay-root.Mui-selected": {
+                    backgroundColor: "#d3bb8a",
+                    color: "#0f1621",
+                    "&:hover": {
+                      backgroundColor: "#b89f6e",
+                    },
                   },
-                }}
-              />
-            ),
-          }}
-          slotProps={{
-            popper: {
-              sx: {
-                "& .MuiPaper-root": {
-                  backgroundColor: "background.default",
-                  color: "text.primary",
-                  border: "1px solid",
-                  borderColor: "text.secondary",
-                },
-                "& .MuiPickersDay-root": {
-                  color: "text.primary",
-                  "&:hover": {
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  "& .MuiPickersDay-root.Mui-disabled": {
+                    color: "grey.500", // Серый цвет для недоступных дат
                   },
-                },
-                "& .MuiPickersDay-root.Mui-selected": {
-                  backgroundColor: "#d3bb8a",
-                  color: "#0f1621",
-                  "&:hover": {
-                    backgroundColor: "#b89f6e",
+                  "& .MuiPickersCalendarHeader-label": {
+                    color: "text.primary",
                   },
-                },
-                "& .MuiPickersDay-root.Mui-disabled": {
-                  color: "grey.500", // Серый цвет для недоступных дат
-                },
-                "& .MuiPickersCalendarHeader-label": {
-                  color: "text.primary",
-                },
-                "& .MuiIconButton-root": {
-                  // Стили для стрелок переключения месяцев
-                  color: "text.primary", // Светлый цвет стрелок
-                  "&:hover": {
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  "& .MuiIconButton-root": {
+                    // Стили для стрелок переключения месяцев
+                    color: "text.primary", // Светлый цвет стрелок
+                    "&:hover": {
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    },
                   },
                 },
               },
+            }}
+            renderInput={(params) => <TextField {...params} />}
+            minDate={dayjs()} // Ограничение минимальной даты на сегодняLocalizationProvider
+          />
+        </LocalizationProvider>
+        <IconButton
+          onClick={() => setSelectedDate(selectedDate.subtract(1, "day"))}
+          disabled={selectedDate.isSame(dayjs(), "day")}
+          sx={{
+            color: "text.primary",
+            "&:hover": {
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+              color: "text.tertiary",
+            },
+            "&.Mui-disabled": {
+              color: "rgba(255, 255, 255, 0.3)",
             },
           }}
-          renderInput={(params) => <TextField {...params} />}
-          minDate={dayjs()} // Ограничение минимальной даты на сегодняLocalizationProvider
-        />
-      </LocalizationProvider>
+        >
+          <ArrowBackIosIcon />
+        </IconButton>
+        <IconButton
+          onClick={() => setSelectedDate(selectedDate.add(1, "day"))}
+          sx={{
+            color: "text.primary",
+            "&:hover": {
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+              color: "text.tertiary",
+            },
+          }}
+        >
+          <ArrowForwardIosIcon />
+        </IconButton>
+      </Box>
 
       {/* Сетка временных интервалов для каждого устройства */}
       <Box sx={{ mb: 4 }}>
