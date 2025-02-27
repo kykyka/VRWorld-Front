@@ -218,7 +218,7 @@ export const Booking = () => {
                     },
                   },
                   "& .MuiPickersDay-root.Mui-disabled": {
-                    color: "grey.500", // Серый цвет для недоступных дат
+                    color: "grey", // Серый цвет для недоступных дат
                   },
                   "& .MuiPickersCalendarHeader-label": {
                     color: "text.primary",
@@ -249,6 +249,10 @@ export const Booking = () => {
             "&.Mui-disabled": {
               color: "rgba(255, 255, 255, 0.3)",
             },
+            // Корректировка смещения для ArrowBackIosIcon
+            "& .MuiSvgIcon-root": {
+              transform: "translateX(4px)", // Смещаем вправо, чтобы выровнять по центру
+            },
           }}
         >
           <ArrowBackIosIcon />
@@ -260,6 +264,10 @@ export const Booking = () => {
             "&:hover": {
               backgroundColor: "rgba(255, 255, 255, 0.1)",
               color: "text.tertiary",
+            },
+            // Корректировка смещения для ArrowForwardIosIcon
+            "& .MuiSvgIcon-root": {
+              transform: "translateX(1px)", // Смещаем влево, чтобы выровнять по центру
             },
           }}
         >
