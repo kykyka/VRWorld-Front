@@ -248,7 +248,7 @@ export const Booking = () => {
                     },
                   },
                   "& .MuiPickersDay-root.Mui-disabled": {
-                    color: "grey", // Серый цвет для недоступных дат
+                    color: "grey !important", // Серый цвет для недоступных дат
                   },
                   "& .MuiPickersCalendarHeader-label": {
                     color: "text.primary",
