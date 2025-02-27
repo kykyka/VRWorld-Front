@@ -11,12 +11,12 @@ export const Booking = () => {
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [bookings, setBookings] = useState([]);
   const [selectedTimes, setSelectedTimes] = useState({}); // Объект для хранения выбранных интервалов по ID устройств
+  const [availableHours, setAvailableHours] = useState({});
   const [userDetails, setUserDetails] = useState({
     name: "",
     description: "",
-    playersCount: 1, // Начальное значение для количества игроков
+    playersCount: "",
   });
-  const [availableHours, setAvailableHours] = useState({ from: 12, to: 20 }); // Инициализация с дефолтными значениями
 
   // Генерация timeSlots на основе availableHours
   const timeSlots = Array.from(
@@ -49,6 +49,8 @@ export const Booking = () => {
             devices: [
               { id: 1, name: "Mock VR Device 1", reservations: [19] },
               { id: 2, name: "Mock VR Device 2", reservations: [19] },
+              { id: 3, name: "Mock VR Device 3", reservations: [19] },
+              { id: 4, name: "Mock VR Device 4", reservations: [19] },
             ],
           },
         };
@@ -61,7 +63,7 @@ export const Booking = () => {
 
   // Проверка занятости слота для конкретного устройства
   const isTimeSlotBooked = (deviceId, hour) => {
-    const device = bookings.find((d) => d.id === deviceId);
+    const device = bookings.find((d) => d.id == deviceId);
     return device ? device.reservations.includes(hour) : false;
   };
 
@@ -119,7 +121,7 @@ export const Booking = () => {
       const result = await response.json();
       setBookings(result.data.devices || bookings);
       setSelectedTimes({});
-      setUserDetails({ name: "", description: "", playersCount: 1 }); // Сбрасываем с начальным значением для playersCount
+      setUserDetails({ name: "", description: "", playersCount: "" }); // Сбрасываем с начальным значением для playersCount
     } catch (error) {
       console.error("Booking error:", error);
       alert(t("bookingError"));
@@ -173,62 +175,63 @@ export const Booking = () => {
         />
 
         {/* Сетка временных интервалов для каждого устройства */}
-        <Grid container spacing={2}>
-          {bookings.map((device) => (
-            <Grid item xs={12} md={3} key={device.id}>
-              <Typography variant="h6" sx={{ mb: 2 }}>
-                {device.name} {/* Название из ответа сервера */}
-              </Typography>
-              {timeSlots.map((hour) => {
-                const isBooked = isTimeSlotBooked(device.id, hour);
-                const isSelected = (selectedTimes[device.id] || []).includes(
-                  hour
-                );
+        <Box sx={{ mb: 4 }}>
+          <Grid container spacing={2}>
+            {bookings.map((device) => (
+              <Grid item xs={12} md={3} key={device.id}>
+                <Typography variant="h6" sx={{ mb: 2 }}>
+                  {device.name} {/* Название из ответа сервера */}
+                </Typography>
+                {timeSlots.map((hour) => {
+                  const isBooked = isTimeSlotBooked(device.id, hour);
+                  const isSelected = (selectedTimes[device.id] || []).includes(
+                    hour
+                  );
 
-                return (
-                  <Button
-                    key={hour}
-                    variant="outlined"
-                    onClick={() => handleTimeSlotToggle(device.id, hour)}
-                    sx={{
-                      mr: 1,
-                      mb: 1,
-                      width: "80px",
-                      backgroundColor: isBooked
-                        ? "rgba(255, 99, 71, 0.2)" // Светло-красный для занятых
-                        : isSelected
-                        ? "#d3bb8a" // Фон выбранного (коричневый, как в теме)
-                        : "transparent", // Прозрачный фон для свободных
-                      color: isSelected
-                        ? "#0f1621" // Текст выбранного (черный, как фон темы)
-                        : isBooked
-                        ? "text.primary" // Белый текст для занятых
-                        : "text.primary", // Белый текст для свободных
-                      borderColor: isBooked
-                        ? "rgba(255, 99, 71, 0.5)" // Обводка для занятых
-                        : "text.secondary", // Черная обводка для свободных/выбранных
-                      "&:hover": {
+                  return (
+                    <Button
+                      key={hour}
+                      variant="outlined"
+                      onClick={() => handleTimeSlotToggle(device.id, hour)}
+                      sx={{
+                        mr: 1,
+                        mb: 1,
+                        width: "80px",
                         backgroundColor: isBooked
-                          ? "rgba(255, 99, 71, 0.3)" // Более светлый красный при наведении на занятые
+                          ? "rgba(255, 99, 71, 0.2)" // Светло-красный для занятых
                           : isSelected
-                          ? "#b89f6e" // Более темный коричневый при наведении на выбранные
-                          : "rgba(255, 255, 255, 0.1)", // Легкий белый при наведении на свободные
-                      },
-                      disabled: isBooked, // Отключаем нажатие на занятые интервалы
-                    }}
-                  >
-                    {hour}:00
-                  </Button>
-                );
-              })}
-            </Grid>
-          ))}
-        </Grid>
+                          ? "#d3bb8a" // Фон выбранного (коричневый, как в теме)
+                          : "transparent", // Прозрачный фон для свободных
+                        color: isSelected
+                          ? "#0f1621" // Текст выбранного (черный, как фон темы)
+                          : isBooked
+                          ? "text.primary" // Белый текст для занятых
+                          : "text.primary", // Белый текст для свободных
+                        borderColor: isBooked
+                          ? "rgba(255, 99, 71, 0.5)" // Обводка для занятых
+                          : "text.secondary", // Черная обводка для свободных/выбранных
+                        "&:hover": {
+                          backgroundColor: isBooked
+                            ? "rgba(255, 99, 71, 0.3)" // Более светлый красный при наведении на занятые
+                            : isSelected
+                            ? "#b89f6e" // Более темный коричневый при наведении на выбранные
+                            : "rgba(255, 255, 255, 0.1)", // Легкий белый при наведении на свободные
+                        },
+                        disabled: isBooked, // Отключаем нажатие на занятые интервалы
+                      }}
+                    >
+                      {hour}:00
+                    </Button>
+                  );
+                })}
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
 
         {/* Контейнер с формой, описанием и деталями заказа (по центру) */}
         <Box
           sx={{
-            mt: 4,
             maxWidth: "1200px",
             margin: "0 auto",
             display: "flex",
@@ -250,11 +253,11 @@ export const Booking = () => {
                 mb: 2,
                 "& .MuiInputBase-root": {
                   backgroundColor: "background.light",
-                  color: "#d3bb8a", // Изменен цвет текста на коричневый
+                  color: "text.secondary",
                   borderRadius: 1,
                 },
                 "& .MuiInputBase-input": {
-                  color: "#d3bb8a", // Изменен цвет текста внутри поля
+                  color: "text.secondary",
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "text.secondary",
@@ -275,11 +278,11 @@ export const Booking = () => {
                 mb: 2,
                 "& .MuiInputBase-root": {
                   backgroundColor: "background.light",
-                  color: "#d3bb8a", // Изменен цвет текста на коричневый
+                  color: "text.secondary",
                   borderRadius: 1,
                 },
                 "& .MuiInputBase-input": {
-                  color: "#d3bb8a", // Изменен цвет текста внутри поля
+                  color: "text.secondary",
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "text.secondary",
@@ -291,26 +294,23 @@ export const Booking = () => {
             />
             <TextField
               fullWidth
-              type="number"
               label={t("playersCount")}
               value={userDetails.playersCount}
               onChange={(e) => {
-                const value = Math.max(
-                  1,
-                  Math.min(10, Number(e.target.value) || 1)
-                ); // Ограничение от 1 до 10
-                setUserDetails({ ...userDetails, playersCount: value });
+                setUserDetails({
+                  ...userDetails,
+                  playersCount: e.target.value,
+                });
               }}
-              inputProps={{ min: 1, max: 10 }} // Ограничение ввода
               sx={{
                 mb: 2,
                 "& .MuiInputBase-root": {
                   backgroundColor: "background.light",
-                  color: "#d3bb8a", // Изменен цвет текста на коричневый
+                  color: "text.secondary",
                   borderRadius: 1,
                 },
                 "& .MuiInputBase-input": {
-                  color: "#d3bb8a", // Изменен цвет текста внутри поля
+                  color: "text.secondary",
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "text.secondary",
