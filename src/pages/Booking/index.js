@@ -36,6 +36,11 @@ export const Booking = () => {
     email: "",
   });
 
+  // Прокрутка к началу страницы при загрузке
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []); 
+
   const currentLang = localStorage.getItem("i18nextLng") || "de";
 
   useEffect(() => {
