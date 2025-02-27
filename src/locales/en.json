@@ -16,5 +16,19 @@
   "all_rights_reserved": "All rights reserved",
   "homeTitle": "Immerse yourself in the virtual world!",
   "homeSubtitle": "Open a world of new emotions",
-  "homeButtonBook": "Book"
+  "homeButtonBook": "Book",
+  "bookYourSlot": "Book Your Slot",
+  "locationName": "VR Arena Prague",
+  "pleaseSelectTimeSlots": "Please select at least one time slot.",
+  "nameRequired": "Name is required.",
+  "bookingSuccess": "Booking successful!",
+  "bookingError": "Error occurred while booking. Please try again.",
+  "fullName": "Full Name",
+  "email": "Email",
+  "description": "Description (optional)",
+  "notesDescription": "Please provide any additional information if needed.",
+  "yourBooking": "Your Booking",
+  "estimatedPrice": "Estimated Price",
+  "confirmBooking": "Confirm Booking",
+  "hour": "hour"
 }

@@ -155,10 +155,30 @@ export const Booking = () => {
         p: 4,
       }}
     >
-      <Typography variant="h4" gutterBottom>
-        {t("bookYourSlot")}
-      </Typography>
-      <Typography variant="subtitle1">{t("locationName")}</Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
+        <Box>
+          <Typography variant="h4" gutterBottom>
+            {t("bookYourSlot")}
+          </Typography>
+          <Typography variant="subtitle1">{t("locationName")}</Typography>
+        </Box>
+        <Typography
+          variant="h6"
+          sx={{
+            color: "#d3bb8a", // Цвет акцента из темы
+            fontWeight: "bold",
+          }}
+        >
+          40 EUR / {t("hour")}
+        </Typography>
+      </Box>
 
       {/* Датапикер с локализацией и стилями */}
       <Box
@@ -483,7 +503,7 @@ export const Booking = () => {
             )}
             <Typography sx={{ fontSize: "0.9rem" }}>
               {t("estimatedPrice")}:{" "}
-              {1180 * Object.values(selectedTimes).flat().length},-
+              {40 * Object.values(selectedTimes).flat().length},-
             </Typography>
           </Box>
         )}

@@ -16,5 +16,19 @@
   "all_rights_reserved": "Alle Rechte vorbehalten",
   "homeTitle": "Eintauchen in die virtuelle Welt!",
   "homeSubtitle": "Öffnen Sie eine Welt neuer Emotionen",
-  "homeButtonBook": "Buchung"
+  "homeButtonBook": "Buchung",
+  "bookYourSlot": "Buchen Sie Ihren Slot",
+  "locationName": "VR Arena Prag",
+  "pleaseSelectTimeSlots": "Bitte wählen Sie mindestens einen Zeitfenster aus.",
+  "nameRequired": "Name ist erforderlich.",
+  "bookingSuccess": "Buchung erfolgreich!",
+  "bookingError": "Fehler bei der Buchung. Bitte versuchen Sie es erneut.",
+  "fullName": "Vollständiger Name",
+  "email": "E-Mail",
+  "description": "Beschreibung (optional)",
+  "notesDescription": "Bitte geben Sie bei Bedarf zusätzliche Informationen an.",
+  "yourBooking": "Ihre Buchung",
+  "estimatedPrice": "Geschätzter Preis",
+  "confirmBooking": "Buchung bestätigen",
+  "hour": "Stunde"
 }
