@@ -1,10 +1,19 @@
 import React from "react";
 import { Box, Typography, Container } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import MainButton from "../Buttons/MainButton";
 
 const HeroSection = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const handleBookClick = () => {
+    navigate("/booking");
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 0);// Перенаправляем на страницу бронирования
+  };
 
   return (
     <Box
@@ -73,7 +82,7 @@ const HeroSection = () => {
         >
           {t("homeSubtitle")}
         </Typography>
-        <MainButton>{t("homeButtonBook")}</MainButton>
+        <MainButton onClick={handleBookClick}>{t("homeButtonBook")}</MainButton>
       </Container>
     </Box>
   );
