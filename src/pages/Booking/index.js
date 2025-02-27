@@ -6,7 +6,6 @@ import {
   Typography,
   TextField,
   IconButton,
-  CircularProgress,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -18,6 +17,7 @@ import "dayjs/locale/de";
 import "dayjs/locale/ru";
 import "dayjs/locale/en";
 import dayjs from "dayjs";
+import GradientCircularProgress from "../../components/Loaders/GradientCircularProgress";
 
 export const Booking = () => {
   const { t } = useTranslation();
@@ -61,6 +61,7 @@ export const Booking = () => {
         const result = await response.json();
         setAvailableHours(result.data.available_hours || { from: 12, to: 20 });
         setBookings(result.data.devices || []);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data, using mock data:", error);
         // Mock данные при ошибке
@@ -77,6 +78,7 @@ export const Booking = () => {
         };
         setAvailableHours(mockResponse.data.available_hours);
         setBookings(mockResponse.data.devices);
+        setLoading(false);
       }
     };
     fetchData();
@@ -313,221 +315,239 @@ export const Booking = () => {
         </IconButton>
       </Box>
 
-      {/* Сетка временных интервалов для каждого устройства */}
-      <Box sx={{ mb: 4 }}>
-        <Grid container spacing={2}>
-          {bookings.map((device) => (
-            <Grid item xs={12} md={3} key={device.id}>
-              <Typography variant="h6" sx={{ mb: 2 }}>
-                {device.name} {/* Название из ответа сервера */}
-              </Typography>
-              {timeSlots.map((hour) => {
-                const isBooked = isTimeSlotBooked(device.id, hour);
-                const isSelected = (selectedTimes[device.id] || []).includes(
-                  hour
-                );
-
-                return (
-                  <Button
-                    key={hour}
-                    variant="outlined"
-                    onClick={() => handleTimeSlotToggle(device.id, hour)}
-                    sx={{
-                      mr: 1,
-                      mb: 1,
-                      width: "80px",
-                      backgroundColor: isBooked
-                        ? "rgba(255, 99, 71, 0.2)" // Светло-красный для занятых
-                        : isSelected
-                        ? "#d3bb8a" // Фон выбранного (коричневый, как в теме)
-                        : "rgba(255, 255, 255, 0.1)", // Прозрачный фон для свободных
-                      color: isSelected
-                        ? "#0f1621" // Текст выбранного (черный, как фон темы)
-                        : isBooked
-                        ? "text.primary" // Белый текст для занятых
-                        : "text.primary", // Белый текст для свободных
-                      borderColor: isBooked
-                        ? "rgba(255, 99, 71, 0.5)" // Обводка для занятых
-                        : "text.secondary", // Черная обводка для свободных/выбранных
-                      "&:hover": {
-                        backgroundColor: isBooked
-                          ? "rgba(255, 99, 71, 0.3)" // Более светлый красный при наведении на занятые
-                          : isSelected
-                          ? "#b89f6e" // Более темный коричневый при наведении на выбранные
-                          : "background.default", // Темный при наведении на свободные
-                        borderColor: isBooked
-                          ? "rgba(255, 99, 71, 0.5)"
-                          : isSelected
-                          ? "#b89f6e" // Более темный коричневый при наведении на выбранные
-                          : "rgba(255, 255, 255, 0.1)", // Прозрачный фон для свободных,
-                      },
-                      disabled: isBooked, // Отключаем нажатие на занятые интервалы
-                    }}
-                  >
-                    {hour}:00
-                  </Button>
-                );
-              })}
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-
-      {/* Контейнер с формой, описанием и деталями заказа (по центру) */}
-      <Box
-        sx={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          display: "flex",
-          alignItems: "start",
-          justifyContent: "center",
-          gap: 2,
-        }}
-      >
-        <Box sx={{ width: "100%", maxWidth: "500px" }}>
-          <TextField
-            fullWidth
-            required // Делаем поле обязательным
-            placeholder={t("fullName")}
-            value={userDetails.name}
-            onChange={(e) =>
-              setUserDetails({ ...userDetails, name: e.target.value })
-            }
-            sx={{
-              mb: 2,
-              "& .MuiInputBase-root": {
-                backgroundColor: "background.light",
-                color: "text.secondary",
-                borderRadius: 1,
-              },
-              "& .MuiInputBase-input": {
-                color: "text.secondary",
-              },
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "text.secondary",
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "text.tertiary",
-              },
-            }}
-          />
-          <TextField
-            fullWidth
-            placeholder={t("email")}
-            value={userDetails.email}
-            onChange={(e) => {
-              setUserDetails({
-                ...userDetails,
-                email: e.target.value,
-              });
-            }}
-            sx={{
-              mb: 2,
-              "& .MuiInputBase-root": {
-                backgroundColor: "background.light",
-                color: "text.secondary",
-                borderRadius: 1,
-              },
-              "& .MuiInputBase-input": {
-                color: "text.secondary",
-              },
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "text.secondary",
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "text.tertiary",
-              },
-            }}
-          />
-          <TextField
-            fullWidth
-            rows={3}
-            placeholder={t("description")}
-            value={userDetails.description}
-            onChange={(e) =>
-              setUserDetails({ ...userDetails, description: e.target.value })
-            }
-            sx={{
-              mb: 2,
-              "& .MuiInputBase-root": {
-                backgroundColor: "background.light",
-                color: "text.secondary",
-                borderRadius: 1,
-              },
-              "& .MuiInputBase-input": {
-                color: "text.secondary",
-              },
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "text.secondary",
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "text.tertiary",
-              },
-            }}
-          />
-
-          <Typography
-            variant="caption"
-            sx={{
-              color: "primary",
-              fontSize: "0.8rem",
-              mb: 2,
-              width: "100%",
-              maxWidth: "500px",
-              textAlign: "left",
-            }}
-          >
-            {t("notesDescription")}
-          </Typography>
+      {loading ? (
+        <Box
+          sx={{
+            display: "flex",
+            width: 1,
+            justifyContent: "center",
+            minHeight: "300px",
+          }}
+        >
+          <GradientCircularProgress />
         </Box>
+      ) : (
+        <>
+          {/* Сетка временных интервалов для каждого устройства */}
+          <Box sx={{ mb: 4 }}>
+            <Grid container spacing={2}>
+              {bookings.map((device) => (
+                <Grid item xs={12} md={3} key={device.id}>
+                  <Typography variant="h6" sx={{ mb: 2 }}>
+                    {device.name} {/* Название из ответа сервера */}
+                  </Typography>
+                  {timeSlots.map((hour) => {
+                    const isBooked = isTimeSlotBooked(device.id, hour);
+                    const isSelected = (
+                      selectedTimes[device.id] || []
+                    ).includes(hour);
 
-        {/* Отображение выбранной брони (показывается только при выборе) */}
-        {Object.keys(selectedTimes).length > 0 && (
+                    return (
+                      <Button
+                        key={hour}
+                        variant="outlined"
+                        onClick={() => handleTimeSlotToggle(device.id, hour)}
+                        sx={{
+                          mr: 1,
+                          mb: 1,
+                          width: "80px",
+                          backgroundColor: isBooked
+                            ? "rgba(255, 99, 71, 0.2)" // Светло-красный для занятых
+                            : isSelected
+                            ? "#d3bb8a" // Фон выбранного (коричневый, как в теме)
+                            : "rgba(255, 255, 255, 0.1)", // Прозрачный фон для свободных
+                          color: isSelected
+                            ? "#0f1621" // Текст выбранного (черный, как фон темы)
+                            : isBooked
+                            ? "text.primary" // Белый текст для занятых
+                            : "text.primary", // Белый текст для свободных
+                          borderColor: isBooked
+                            ? "rgba(255, 99, 71, 0.5)" // Обводка для занятых
+                            : "text.secondary", // Черная обводка для свободных/выбранных
+                          "&:hover": {
+                            backgroundColor: isBooked
+                              ? "rgba(255, 99, 71, 0.3)" // Более светлый красный при наведении на занятые
+                              : isSelected
+                              ? "#b89f6e" // Более темный коричневый при наведении на выбранные
+                              : "background.default", // Темный при наведении на свободные
+                            borderColor: isBooked
+                              ? "rgba(255, 99, 71, 0.5)"
+                              : isSelected
+                              ? "#b89f6e" // Более темный коричневый при наведении на выбранные
+                              : "rgba(255, 255, 255, 0.1)", // Прозрачный фон для свободных,
+                          },
+                          disabled: isBooked, // Отключаем нажатие на занятые интервалы
+                        }}
+                      >
+                        {hour}:00
+                      </Button>
+                    );
+                  })}
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+
+          {/* Контейнер с формой, описанием и деталями заказа (по центру) */}
           <Box
             sx={{
-              p: 2,
-              boxSizing: "border-box",
-              backgroundColor: "#d3bb8a",
-              color: "#0f1621",
-              borderRadius: 2,
-              width: "100%",
-              maxWidth: "500px",
+              maxWidth: "1200px",
+              margin: "0 auto",
+              display: "flex",
+              alignItems: "start",
+              justifyContent: "center",
+              gap: 2,
             }}
           >
-            <Typography variant="h6" sx={{ mb: 1 }}>
-              {t("yourBooking")}
-            </Typography>
-            {Object.entries(selectedTimes).map(([deviceId, hours]) =>
-              hours.map((hour, index) => (
-                <Typography
-                  key={`${deviceId}-${hour}`}
-                  sx={{ fontSize: "0.9rem", mb: 0.5 }}
-                >
-                  {dayjs(selectedDate).format("DD.MM.YYYY")} {hour}:00-
-                  {hour + 1}:00 –{" "}
-                  {bookings.find((d) => d.id === parseInt(deviceId))?.name}
-                </Typography>
-              ))
-            )}
-            <Typography sx={{ fontSize: "0.9rem" }}>
-              {t("estimatedPrice")}:{" "}
-              {40 * Object.values(selectedTimes).flat().length},-
-            </Typography>
-          </Box>
-        )}
-      </Box>
+            <Box sx={{ width: "100%", maxWidth: "500px" }}>
+              <TextField
+                fullWidth
+                required // Делаем поле обязательным
+                placeholder={t("fullName")}
+                value={userDetails.name}
+                onChange={(e) =>
+                  setUserDetails({ ...userDetails, name: e.target.value })
+                }
+                sx={{
+                  mb: 2,
+                  "& .MuiInputBase-root": {
+                    backgroundColor: "background.light",
+                    color: "text.secondary",
+                    borderRadius: 1,
+                  },
+                  "& .MuiInputBase-input": {
+                    color: "text.secondary",
+                  },
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "text.secondary",
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "text.tertiary",
+                  },
+                }}
+              />
+              <TextField
+                fullWidth
+                placeholder={t("email")}
+                value={userDetails.email}
+                onChange={(e) => {
+                  setUserDetails({
+                    ...userDetails,
+                    email: e.target.value,
+                  });
+                }}
+                sx={{
+                  mb: 2,
+                  "& .MuiInputBase-root": {
+                    backgroundColor: "background.light",
+                    color: "text.secondary",
+                    borderRadius: 1,
+                  },
+                  "& .MuiInputBase-input": {
+                    color: "text.secondary",
+                  },
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "text.secondary",
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "text.tertiary",
+                  },
+                }}
+              />
+              <TextField
+                fullWidth
+                rows={3}
+                placeholder={t("description")}
+                value={userDetails.description}
+                onChange={(e) =>
+                  setUserDetails({
+                    ...userDetails,
+                    description: e.target.value,
+                  })
+                }
+                sx={{
+                  mb: 2,
+                  "& .MuiInputBase-root": {
+                    backgroundColor: "background.light",
+                    color: "text.secondary",
+                    borderRadius: 1,
+                  },
+                  "& .MuiInputBase-input": {
+                    color: "text.secondary",
+                  },
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "text.secondary",
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "text.tertiary",
+                  },
+                }}
+              />
 
-      {/* Кнопка под yourBooking */}
-      <Box sx={{ width: 1, display: "flex", justifyContent: "center" }}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleBooking}
-          sx={{ mt: 4 }}
-        >
-          {t("confirmBooking")}
-        </Button>
-      </Box>
+              <Typography
+                variant="caption"
+                sx={{
+                  color: "primary",
+                  fontSize: "0.8rem",
+                  mb: 2,
+                  width: "100%",
+                  maxWidth: "500px",
+                  textAlign: "left",
+                }}
+              >
+                {t("notesDescription")}
+              </Typography>
+            </Box>
+
+            {/* Отображение выбранной брони (показывается только при выборе) */}
+            {Object.keys(selectedTimes).length > 0 && (
+              <Box
+                sx={{
+                  p: 2,
+                  boxSizing: "border-box",
+                  backgroundColor: "#d3bb8a",
+                  color: "#0f1621",
+                  borderRadius: 2,
+                  width: "100%",
+                  maxWidth: "500px",
+                }}
+              >
+                <Typography variant="h6" sx={{ mb: 1 }}>
+                  {t("yourBooking")}
+                </Typography>
+                {Object.entries(selectedTimes).map(([deviceId, hours]) =>
+                  hours.map((hour, index) => (
+                    <Typography
+                      key={`${deviceId}-${hour}`}
+                      sx={{ fontSize: "0.9rem", mb: 0.5 }}
+                    >
+                      {dayjs(selectedDate).format("DD.MM.YYYY")} {hour}:00-
+                      {hour + 1}:00 –{" "}
+                      {bookings.find((d) => d.id === parseInt(deviceId))?.name}
+                    </Typography>
+                  ))
+                )}
+                <Typography sx={{ fontSize: "0.9rem" }}>
+                  {t("estimatedPrice")}:{" "}
+                  {40 * Object.values(selectedTimes).flat().length},-
+                </Typography>
+              </Box>
+            )}
+          </Box>
+
+          {/* Кнопка под yourBooking */}
+          <Box sx={{ width: 1, display: "flex", justifyContent: "center" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleBooking}
+              sx={{ mt: 4 }}
+            >
+              {t("confirmBooking")}
+            </Button>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };
