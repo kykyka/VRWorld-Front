@@ -105,7 +105,7 @@ export const Booking = () => {
 
     try {
       const baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:8000";
-      const response = await fetch(`${baseURL}/day/${bookingData.date}`, {
+      const response = await fetch(`${baseURL}/reserve`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bookingData),
