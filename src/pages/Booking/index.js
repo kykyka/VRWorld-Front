@@ -495,7 +495,7 @@ export const Booking = () => {
               <TextField
                 fullWidth
                 rows={3}
-                placeholder={t("description")}
+                placeholder={t("bookingDescription")}
                 value={userDetails.description}
                 onChange={(e) =>
                   setUserDetails({
