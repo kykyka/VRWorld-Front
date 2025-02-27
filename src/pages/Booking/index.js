@@ -6,6 +6,7 @@ import {
   Typography,
   TextField,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -20,6 +21,7 @@ import dayjs from "dayjs";
 
 export const Booking = () => {
   const { t } = useTranslation();
+  const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [bookings, setBookings] = useState([]);
   const [selectedTimes, setSelectedTimes] = useState({}); // Объект для хранения выбранных интервалов по ID устройств
@@ -82,7 +84,7 @@ export const Booking = () => {
 
   // Проверка занятости слота для конкретного устройства
   const isTimeSlotBooked = (deviceId, hour) => {
-    const device = bookings.find((d) => d.id == deviceId);
+    const device = bookings.find((d) => d.id === deviceId);
     return device ? device.reservations.includes(hour) : false;
   };
 
@@ -113,6 +115,12 @@ export const Booking = () => {
     }
     if (!userDetails.name.trim()) {
       alert(t("nameRequired"));
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userDetails.email)) {
+      alert(t("invalidEmail")); // Добавить ключ "invalidEmail" в переводы
       return;
     }
 

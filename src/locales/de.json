@@ -30,5 +30,6 @@
   "yourBooking": "Ihre Buchung",
   "estimatedPrice": "Geschätzter Preis",
   "confirmBooking": "Buchung bestätigen",
-  "hour": "Stunde"
+  "hour": "Stunde",
+  "invalidEmail": "Ungültiges E-Mail-Format."
 }

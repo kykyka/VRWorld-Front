@@ -30,5 +30,6 @@
   "yourBooking": "Your Booking",
   "estimatedPrice": "Estimated Price",
   "confirmBooking": "Confirm Booking",
-  "hour": "hour"
+  "hour": "hour",
+  "invalidEmail": "Invalid email format."
 }
