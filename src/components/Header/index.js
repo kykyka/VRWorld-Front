@@ -1,11 +1,61 @@
 import { useState, useEffect } from "react";
 import { AppBar, Toolbar, Box, Drawer, IconButton } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink as RouterNavLink } from "react-router-dom";
+import { styled } from "@mui/system";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTranslation } from "react-i18next";
-
 import LanguagePopover from "./LanguagePopover";
+
+// Кастомный NavLink с ховер-эффектом и подсветкой активной ссылки
+const StyledNavLinkBase = styled("a")(({ isActive }) => ({
+  textDecoration: "none",
+  textTransform: "uppercase",
+  color: isActive ? "#d3bb8a" : "#d6dbe4", // Подсветка активной ссылки
+  fontSize: "18px",
+  fontWeight: 700,
+  margin: "10px 0",
+  position: "relative",
+  display: "inline-block",
+  overflow: "hidden",
+  "& > span": {
+    display: "inline-block",
+    transition: isActive ? "none" : "transform 0.3s ease-in-out", // Отключаем ховер для активной
+  },
+  "&:hover > span": {
+    transform: isActive ? "none" : "translateY(100%)", // Ховер только для неактивных
+  },
+  "&:before": {
+    content: "attr(data-text)",
+    position: "absolute",
+    top: "-100%", // Изначально сверху
+    left: 0,
+    width: "100%",
+    height: "100%",
+    color: "#d3bb8a", // Коричневый цвет для ховер-эффекта
+    transition: isActive ? "none" : "top 0.3s ease-in-out", // Отключаем ховер для активной
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  "&:hover:before": {
+    top: isActive ? "-100%" : 0, // Ховер не применяется для активной ссылки
+  },
+}));
+
+// Обертка для передачи isActive из NavLink
+const StyledNavLink = ({ to, children, ...props }) => (
+  <RouterNavLink
+    to={to}
+    style={({ isActive }) => ({ display: "inline-block" })}
+  >
+    {({ isActive }) => (
+      <StyledNavLinkBase isActive={isActive} data-text={children} {...props}>
+        <span>{children}</span>
+      </StyledNavLinkBase>
+    )}
+  </RouterNavLink>
+);
 
 export const Header = () => {
   const { t } = useTranslation();
@@ -29,16 +79,6 @@ export const Header = () => {
     setOpen(!open);
   };
 
-  const linkStyle = ({ isActive }) => ({
-    textDecoration: "none",
-    textTransform: "uppercase",
-    color: isActive ? "#d3bb8a" : "#d6dbe4",
-    fontSize: "18px",
-    fontWeight: 700,
-    transition: "color 0.3s",
-    margin: "10px 0",
-  });
-
   return (
     <AppBar
       position="sticky"
@@ -61,18 +101,18 @@ export const Header = () => {
         />
         {/* Навигация для больших экранов */}
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
-          <NavLink to="/" style={linkStyle} aria-label={t("home")}>
+          <StyledNavLink to="/" aria-label={t("home")}>
             {t("home")}
-          </NavLink>
-          <NavLink to="/games" style={linkStyle} aria-label={t("games")}>
+          </StyledNavLink>
+          <StyledNavLink to="/games" aria-label={t("games")}>
             {t("games")}
-          </NavLink>
-          <NavLink to="/pricing" style={linkStyle} aria-label={t("pricing")}>
+          </StyledNavLink>
+          <StyledNavLink to="/pricing" aria-label={t("pricing")}>
             {t("pricing")}
-          </NavLink>
-          <NavLink to="/booking" style={linkStyle} aria-label={t("book")}>
+          </StyledNavLink>
+          <StyledNavLink to="/booking" aria-label={t("book")}>
             {t("book")}
-          </NavLink>
+          </StyledNavLink>
           <LanguagePopover />
         </Box>
 
@@ -85,7 +125,6 @@ export const Header = () => {
           >
             <MenuIcon />
           </IconButton>
-
           <LanguagePopover />
         </Box>
       </Toolbar>
@@ -101,7 +140,7 @@ export const Header = () => {
           left: 0,
           right: 0,
           zIndex: 1300,
-          transition: "transform 0.3s ease", // Плавное открытие/закрытие
+          transition: "transform 0.3s ease",
         }}
       >
         <Box
@@ -115,7 +154,6 @@ export const Header = () => {
             height: "100vh",
           }}
         >
-          {/* Кнопка закрытия */}
           <IconButton
             onClick={handleDrawerToggle}
             sx={{
@@ -129,39 +167,34 @@ export const Header = () => {
             <CloseIcon />
           </IconButton>
 
-          {/* Навигационные ссылки */}
-          <NavLink
+          <StyledNavLink
             to="/"
-            style={linkStyle}
             onClick={handleDrawerToggle}
             aria-label={t("home")}
           >
             {t("home")}
-          </NavLink>
-          <NavLink
+          </StyledNavLink>
+          <StyledNavLink
             to="/games"
-            style={linkStyle}
             onClick={handleDrawerToggle}
-            aaria-label={t("games")}
+            aria-label={t("games")}
           >
             {t("games")}
-          </NavLink>
-          <NavLink
+          </StyledNavLink>
+          <StyledNavLink
             to="/pricing"
-            style={linkStyle}
             onClick={handleDrawerToggle}
             aria-label={t("pricing")}
           >
             {t("pricing")}
-          </NavLink>
-          <NavLink
+          </StyledNavLink>
+          <StyledNavLink
             to="/booking"
-            style={linkStyle}
             onClick={handleDrawerToggle}
-            aaria-label={t("book")}
+            aria-label={t("book")}
           >
             {t("book")}
-          </NavLink>
+          </StyledNavLink>
         </Box>
       </Drawer>
     </AppBar>
