@@ -7,6 +7,7 @@ import {
   TextField,
   IconButton,
 } from "@mui/material";
+import { green } from "@mui/material/colors";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -22,6 +23,8 @@ import GradientCircularProgress from "../../components/Loaders/GradientCircularP
 export const Booking = () => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
+  const [bookIsLoading, setBookIsLoading] = useState(false);
+  const [success, setSuccess] = React.useState(false);
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [bookings, setBookings] = useState([]);
   const [selectedTimes, setSelectedTimes] = useState({}); // Объект для хранения выбранных интервалов по ID устройств
@@ -111,18 +114,26 @@ export const Booking = () => {
 
   // Обработка бронирования с проверкой обязательного поля name
   const handleBooking = async () => {
+    if (!bookIsLoading) {
+      setSuccess(false);
+      setBookIsLoading(true);
+    }
+
     if (Object.values(selectedTimes).every((hours) => hours.length === 0)) {
       alert(t("pleaseSelectTimeSlots"));
+      setBookIsLoading(false);
       return;
     }
     if (!userDetails.name.trim()) {
       alert(t("nameRequired"));
+      setBookIsLoading(false);
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(userDetails.email)) {
       alert(t("invalidEmail")); // Добавить ключ "invalidEmail" в переводы
+      setBookIsLoading(false);
       return;
     }
 
@@ -143,18 +154,31 @@ export const Booking = () => {
       });
 
       if (!response.ok) {
+        setBookIsLoading(false);
         throw new Error("Booking failed");
       }
 
-      alert(t("bookingSuccess"));
       const result = await response.json();
       setBookings(result.data.devices || bookings);
       setSelectedTimes({});
       setUserDetails({ name: "", description: "", email: "" }); // Сбрасываем с начальным значением для email
+      setSuccess(true);
+      setBookIsLoading(false);
     } catch (error) {
       console.error("Booking error:", error);
+      setBookIsLoading(false);
       alert(t("bookingError"));
     }
+  };
+
+  const buttonSx = {
+    mt: 4,
+    ...(success && {
+      bgcolor: green[500],
+      "&:hover": {
+        bgcolor: green[700],
+      },
+    }),
   };
 
   return (
@@ -322,9 +346,10 @@ export const Booking = () => {
             width: 1,
             justifyContent: "center",
             minHeight: "300px",
+            py: 10,
           }}
         >
-          <GradientCircularProgress />
+          <GradientCircularProgress size={48} />
         </Box>
       ) : (
         <>
@@ -536,15 +561,35 @@ export const Booking = () => {
           </Box>
 
           {/* Кнопка под yourBooking */}
-          <Box sx={{ width: 1, display: "flex", justifyContent: "center" }}>
+          <Box
+            sx={{
+              width: 1,
+              display: "flex",
+              justifyContent: "center",
+              position: "relative",
+            }}
+          >
             <Button
               variant="contained"
               color="primary"
               onClick={handleBooking}
-              sx={{ mt: 4 }}
+              sx={buttonSx}
+              disabled={bookIsLoading}
             >
-              {t("confirmBooking")}
+              {success ? t("bookingSuccess") : t("confirmBooking")}
             </Button>
+            {bookIsLoading && (
+              <GradientCircularProgress
+                size={24}
+                progressSx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  marginTop: "2px",
+                  marginLeft: "-12px",
+                }}
+              />
+            )}
           </Box>
         </>
       )}

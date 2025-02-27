@@ -1,6 +1,6 @@
 import CircularProgress from "@mui/material/CircularProgress";
 
-const GradientCircularProgress = () => {
+const GradientCircularProgress = (props) => {
   return (
     <>
       <svg width={0} height={0}>
@@ -12,7 +12,15 @@ const GradientCircularProgress = () => {
         </defs>
       </svg>
       <CircularProgress
-        sx={{ "svg circle": { stroke: "url(#my_gradient)" } }}
+        sx={
+          props.progressSx
+            ? {
+                "svg circle": { stroke: "url(#my_gradient)" },
+                ...props.progressSx,
+              }
+            : { "svg circle": { stroke: "url(#my_gradient)" } }
+        }
+        {...props}
       />
     </>
   );
