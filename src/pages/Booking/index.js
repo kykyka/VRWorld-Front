@@ -149,6 +149,19 @@ export const Booking = () => {
         <DatePicker
           value={selectedDate}
           onChange={(newDate) => setSelectedDate(newDate)}
+          format={"DD.MM.YYYY"}
+          slotProps={{
+            layout: {
+              sx: {
+                color: "#1565c0",
+                borderRadius: "2px",
+                borderWidth: "8px",
+                borderColor: "#2196f3",
+                border: "8px solid",
+                backgroundColor: "#90caf9",
+              },
+            },
+          }}
           renderInput={(params) => (
             <TextField
               {...params}
