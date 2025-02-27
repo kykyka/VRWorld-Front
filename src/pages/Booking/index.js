@@ -15,7 +15,7 @@ export const Booking = () => {
   const [userDetails, setUserDetails] = useState({
     name: "",
     description: "",
-    playersCount: "",
+    email: "",
   });
 
   // Генерация timeSlots на основе availableHours
@@ -101,7 +101,7 @@ export const Booking = () => {
       date: selectedDate.format("YYYY-MM-DD"),
       name: userDetails.name,
       description: userDetails.description,
-      playersCount: userDetails.playersCount, // Добавляем количество игроков
+      email: userDetails.email, // Добавляем количество игроков
       reservations: selectedTimes,
     };
 
@@ -121,7 +121,7 @@ export const Booking = () => {
       const result = await response.json();
       setBookings(result.data.devices || bookings);
       setSelectedTimes({});
-      setUserDetails({ name: "", description: "", playersCount: "" }); // Сбрасываем с начальным значением для playersCount
+      setUserDetails({ name: "", description: "", email: "" }); // Сбрасываем с начальным значением для email
     } catch (error) {
       console.error("Booking error:", error);
       alert(t("bookingError"));
@@ -244,7 +244,7 @@ export const Booking = () => {
             <TextField
               fullWidth
               required // Делаем поле обязательным
-              label={t("fullName")}
+              placeholder={t("fullName")}
               value={userDetails.name}
               onChange={(e) =>
                 setUserDetails({ ...userDetails, name: e.target.value })
@@ -269,7 +269,36 @@ export const Booking = () => {
             />
             <TextField
               fullWidth
-              label={t("description")}
+              placeholder={t("email")}
+              value={userDetails.email}
+              onChange={(e) => {
+                setUserDetails({
+                  ...userDetails,
+                  email: e.target.value,
+                });
+              }}
+              sx={{
+                mb: 2,
+                "& .MuiInputBase-root": {
+                  backgroundColor: "background.light",
+                  color: "text.secondary",
+                  borderRadius: 1,
+                },
+                "& .MuiInputBase-input": {
+                  color: "text.secondary",
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "text.secondary",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "text.tertiary",
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              rows={3}
+              placeholder={t("description")}
               value={userDetails.description}
               onChange={(e) =>
                 setUserDetails({ ...userDetails, description: e.target.value })
@@ -292,34 +321,7 @@ export const Booking = () => {
                 },
               }}
             />
-            <TextField
-              fullWidth
-              label={t("playersCount")}
-              value={userDetails.playersCount}
-              onChange={(e) => {
-                setUserDetails({
-                  ...userDetails,
-                  playersCount: e.target.value,
-                });
-              }}
-              sx={{
-                mb: 2,
-                "& .MuiInputBase-root": {
-                  backgroundColor: "background.light",
-                  color: "text.secondary",
-                  borderRadius: 1,
-                },
-                "& .MuiInputBase-input": {
-                  color: "text.secondary",
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "text.secondary",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "text.tertiary",
-                },
-              }}
-            />
+
             <Typography
               variant="caption"
               sx={{
@@ -372,12 +374,12 @@ export const Booking = () => {
         </Box>
 
         {/* Кнопка под yourBooking */}
-        <Box sx={{ width: 1 }}>
+        <Box sx={{ width: 1, display: "flex", justifyContent: "center" }}>
           <Button
             variant="contained"
             color="primary"
             onClick={handleBooking}
-            sx={{ mt: 2 }}
+            sx={{ mt: 4 }}
           >
             {t("confirmBooking")}
           </Button>
