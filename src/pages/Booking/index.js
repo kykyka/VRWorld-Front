@@ -340,6 +340,7 @@ export const Booking = () => {
             <Box
               sx={{
                 p: 2,
+                boxSizing: "border-box",
                 backgroundColor: "#d3bb8a",
                 color: "#0f1621",
                 borderRadius: 2,
