@@ -235,8 +235,8 @@ export const Booking = () => {
             maxWidth: "1200px",
             margin: "0 auto",
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            alignItems: "start",
+            justifyContent: "center",
             gap: 2,
           }}
         >
@@ -369,8 +369,10 @@ export const Booking = () => {
               </Typography>
             </Box>
           )}
+        </Box>
 
-          {/* Кнопка под yourBooking */}
+        {/* Кнопка под yourBooking */}
+        <Box sx={{ width: 1 }}>
           <Button
             variant="contained"
             color="primary"
