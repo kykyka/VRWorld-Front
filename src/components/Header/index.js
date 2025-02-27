@@ -43,6 +43,7 @@ export const Header = () => {
     <AppBar
       position="sticky"
       sx={{
+        borderBottom: scrolled ? "" : "1px solid #47505f",
         backgroundColor: scrolled ? "rgba(0, 0, 0, 0.4)" : "background.default",
         backdropFilter: scrolled ? "blur(10px)" : "none",
         transition: "all 0.3s ease-in-out",

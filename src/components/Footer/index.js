@@ -28,6 +28,7 @@ export const Footer = () => {
       component="footer"
       sx={{
         backgroundColor: "background.default",
+        borderTop: "1px solid #47505f",
         color: "text.primary",
         padding: "40px 40px",
         textAlign: "left",
