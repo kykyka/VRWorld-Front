@@ -7,8 +7,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useTranslation } from "react-i18next";
 import LanguagePopover from "./LanguagePopover";
 
-// Кастомный NavLink с ховер-эффектом и подсветкой активной ссылки
-const StyledNavLinkBase = styled("a")(({ isActive }) => ({
+// Кастомный элемент для стилизации (не <a>, а <span>)
+const StyledNavLinkBase = styled("span")(({ isActive }) => ({
   textDecoration: "none",
   textTransform: "uppercase",
   color: isActive ? "#d3bb8a" : "#d6dbe4", // Подсветка активной ссылки
@@ -47,7 +47,10 @@ const StyledNavLinkBase = styled("a")(({ isActive }) => ({
 const StyledNavLink = ({ to, children, ...props }) => (
   <RouterNavLink
     to={to}
-    style={({ isActive }) => ({ display: "inline-block" })}
+    style={({ isActive }) => ({
+      textDecoration: "none", // Переносим базовые стили ссылки сюда
+      display: "inline-block",
+    })}
   >
     {({ isActive }) => (
       <StyledNavLinkBase isActive={isActive} data-text={children} {...props}>
