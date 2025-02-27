@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, Card, CardMedia, CardContent } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import GradientCircularProgress from "../../components/Loaders/GradientCircularProgress";
 
 const Games = () => {
   const { t, i18n } = useTranslation();
@@ -74,7 +75,20 @@ const Games = () => {
   }, []);
 
   if (loading) {
-    return <Typography>Loading...</Typography>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          width: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "400px",
+          py: 10,
+        }}
+      >
+        <GradientCircularProgress size={48} />
+      </Box>
+    );
   }
 
   return (

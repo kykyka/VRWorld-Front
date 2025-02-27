@@ -353,7 +353,8 @@ export const Booking = () => {
             display: "flex",
             width: 1,
             justifyContent: "center",
-            minHeight: "300px",
+            alignItems: "center",
+            minHeight: "330px",
             py: 10,
           }}
         >
