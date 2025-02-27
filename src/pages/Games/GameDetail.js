@@ -52,10 +52,12 @@ const GameDetail = () => {
                 de: ["shooter", "aktion"],
               },
               name: "VR Shooter",
-              image: "https://via.placeholder.com/300x200",
+              image:
+                "https://miro.medium.com/v2/resize:fit:1400/1*2MTeG3JJhQtbyUXmLzIniw.png",
               images: [
-                "https://via.placeholder.com/300",
-                "https://via.placeholder.com/300",
+                "https://c4.wallpaperflare.com/wallpaper/519/347/693/5bd106835c103-wallpaper-preview.jpg",
+                "https://escapehunt.com/wp-content/uploads/sites/70/2020/10/EH-Survival-Local-Game-Hero.jpg",
+                "https://image.api.playstation.com/vulcan/ap/rnd/202302/1000/cca9561ada20a890dd1074fd71bc6fd7eaefb800edc52cc7.jpg",
               ],
               videos: ["https://www.youtube.com/embed/dQw4w9WgXcQ"],
               age: 8,
