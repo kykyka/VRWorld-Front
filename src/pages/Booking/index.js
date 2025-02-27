@@ -232,7 +232,7 @@ export const Booking = () => {
                     backgroundColor: "background.default",
                     color: "text.primary",
                     border: "1px solid",
-                    borderColor: "text.secondary",
+                    borderColor: "text.tertiary",
                   },
                   "& .MuiPickersDay-root": {
                     color: "text.primary",
