@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Box, Typography, Button, Grid, CardMedia } from "@mui/material";
 import GradientCircularProgress from "../../components/Loaders/GradientCircularProgress";
+import MainButton from "../../components/Buttons/MainButton";
 import { useTranslation } from "react-i18next";
 
 const GameDetail = () => {
@@ -101,9 +102,9 @@ const GameDetail = () => {
         p: 4,
       }}
     >
-      <Button onClick={() => navigate("/games")} sx={{ mb: 2 }}>
+      <MainButton onClick={() => navigate("/games")} sx={{ mb: 2 }}>
         {t("backToGames")}
-      </Button>
+      </MainButton>
       <Typography variant="h4" gutterBottom>
         {game.name}
       </Typography>
