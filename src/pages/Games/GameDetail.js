@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Box, Typography, Button, Grid, CardMedia } from "@mui/material";
+import GradientCircularProgress from "../../components/Loaders/GradientCircularProgress";
 import { useTranslation } from "react-i18next";
 
 const GameDetail = () => {
@@ -17,56 +18,54 @@ const GameDetail = () => {
       try {
         const baseURL =
           process.env.REACT_APP_BASE_URL || "http://localhost:8000";
-        const response = await fetch(`${baseURL}/games`); // Предполагаемый эндпоинт
+        const response = await fetch(`${baseURL}/games/${id}`); // Предполагаемый эндпоинт
 
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
 
         const result = await response.json();
-        const gameData = result.data[parseInt(id)];
+        const gameData = result.data;
         setGame(gameData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching game, using mock data:", error);
         const mockResponse = {
-          data: [
-            {
-              texts: {
-                ru: {
-                  preview: "Крутой шутер",
-                  description: "Полное описание игры",
-                },
-                de: {
-                  preview: "Cooler Shooter",
-                  description: "Vollständige Spielbeschreibung",
-                },
-                en: {
-                  preview: "Cool Shooter",
-                  description: "Full game description",
-                },
+          data: {
+            texts: {
+              ru: {
+                preview: "Крутой шутер",
+                description: "Полное описание игры",
               },
-              game_genre: {
-                en: ["shooter", "action"],
-                ru: ["стрелалка", "экшн"],
-                de: ["shooter", "aktion"],
+              de: {
+                preview: "Cooler Shooter",
+                description: "Vollständige Spielbeschreibung",
               },
-              name: "VR Shooter",
-              image:
-                "https://miro.medium.com/v2/resize:fit:1400/1*2MTeG3JJhQtbyUXmLzIniw.png",
-              images: [
-                "https://c4.wallpaperflare.com/wallpaper/519/347/693/5bd106835c103-wallpaper-preview.jpg",
-                "https://escapehunt.com/wp-content/uploads/sites/70/2020/10/EH-Survival-Local-Game-Hero.jpg",
-                "https://image.api.playstation.com/vulcan/ap/rnd/202302/1000/cca9561ada20a890dd1074fd71bc6fd7eaefb800edc52cc7.jpg",
-              ],
-              videos: ["https://www.youtube.com/embed/dQw4w9WgXcQ"],
-              age: 8,
-              outside: false,
-              max_players_count: 4,
+              en: {
+                preview: "Cool Shooter",
+                description: "Full game description",
+              },
             },
-          ],
+            game_genre: {
+              en: ["shooter", "action"],
+              ru: ["стрелалка", "экшн"],
+              de: ["shooter", "aktion"],
+            },
+            name: "VR Shooter",
+            image:
+              "https://miro.medium.com/v2/resize:fit:1400/1*2MTeG3JJhQtbyUXmLzIniw.png",
+            images: [
+              "https://c4.wallpaperflare.com/wallpaper/519/347/693/5bd106835c103-wallpaper-preview.jpg",
+              "https://escapehunt.com/wp-content/uploads/sites/70/2020/10/EH-Survival-Local-Game-Hero.jpg",
+              "https://image.api.playstation.com/vulcan/ap/rnd/202302/1000/cca9561ada20a890dd1074fd71bc6fd7eaefb800edc52cc7.jpg",
+            ],
+            videos: ["https://www.youtube.com/embed/dQw4w9WgXcQ"],
+            age: 8,
+            outside: false,
+            max_players_count: 4,
+          },
         };
-        const gameData = mockResponse.data[parseInt(id)];
+        const gameData = mockResponse.data;
         setGame(gameData);
         setLoading(false);
       }
@@ -78,7 +77,20 @@ const GameDetail = () => {
   }, [id]);
 
   if (loading || !game) {
-    return <Typography>Loading...</Typography>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          width: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "400px",
+          py: 10,
+        }}
+      >
+        <GradientCircularProgress size={48} />
+      </Box>
+    );
   }
 
   return (
