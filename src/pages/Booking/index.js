@@ -241,9 +241,18 @@ export const Booking = () => {
           <Typography variant="h4" gutterBottom>
             {t("bookYourSlot")}
           </Typography>
+          <Box
+            sx={{
+              position: { md: "absolute" },
+              left: { md: "50%" },
+              transform: { md: "translateX(-50%)" },
+              mb: { xs: 2 },
+            }}
+          >
+            <OutboundBooking initData={{ availableHours, bookings }} />
+          </Box>
           <Typography variant="subtitle1">{t("locationName")}</Typography>
         </Box>
-        <OutboundBooking initData={{ availableHours, bookings }} />
         {price && (
           <Typography
             variant="h6"
