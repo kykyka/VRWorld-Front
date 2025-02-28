@@ -112,7 +112,7 @@ const OutboundBooking = () => {
   };
 
   const fieldStyle = {
-    mb: 2,
+    mb: 3,
     "& .MuiInputBase-root": {
       backgroundColor: "background.light",
       color: "text.secondary",
@@ -152,208 +152,207 @@ const OutboundBooking = () => {
             p: 4,
             border: "1px solid #d3bb8a",
             borderRadius: 2,
-            display: "flex",
-            gap: 2,
           }}
         >
-          {/* Левая часть - Календарь и слоты */}
-          <Box sx={{ width: "50%" }}>
-            <LocalizationProvider
-              dateAdapter={AdapterDayjs}
-              adapterLocale={currentLang}
-            >
-              <DateCalendar
-                value={selectedDate}
-                onChange={(newDate) => setSelectedDate(newDate)}
-                minDate={dayjs()}
-                sx={{
-                  m: 0,
-                  "& .MuiPickersCalendarHeader-label": {
-                    color: "text.primary",
-                  },
-                  "& .MuiPickersDay-root.Mui-disabled": {
-                    color: "grey !important",
-                  },
-                  "& .MuiIconButton-root": {
-                    color: "text.primary",
-                    "&:hover": {
-                      backgroundColor: "rgba(255, 255, 255, 0.1)",
-                    },
-                  },
-                  "& .MuiPickersDay-root": {
-                    color: "text.primary",
-                    "&:hover": { bgcolor: "rgba(255, 255, 255, 0.1)" },
-                    "&.Mui-selected": {
-                      bgcolor: "#d3bb8a",
-                      color: "#0f1621",
-                      "&:hover": { bgcolor: "#b89f6e" },
-                    },
-                  },
-                }}
-              />
-            </LocalizationProvider>
-
-            <Box sx={{ mb: 2 }}>
-              {timeSlots.map((hour) => {
-                const isBooked = isTimeSlotBooked(hour);
-                const isSelected = selectedTimes.includes(hour);
-                return (
-                  <Button
-                    key={hour}
-                    variant="outlined"
-                    disabled={isBooked}
-                    onClick={() => handleTimeSlotToggle(hour)}
-                    sx={{
-                      mr: 1,
-                      mb: 1,
-                      width: "80px",
-                      backgroundColor: isBooked
-                        ? "rgba(255, 99, 71, 0.2)"
-                        : isSelected
-                        ? "#d3bb8a"
-                        : "rgba(255, 255, 255, 0.1)",
-                      color: isSelected ? "#0f1621" : "text.primary",
-                      borderColor: isBooked
-                        ? "rgba(255, 99, 71, 0.5)"
-                        : "text.secondary",
-                      "&:hover": {
-                        backgroundColor: isBooked
-                          ? "rgba(255, 99, 71, 0.3)"
-                          : isSelected
-                          ? "#b89f6e"
-                          : "background.default",
-                        borderColor: isSelected
-                          ? "#b89f6e"
-                          : "rgba(255, 255, 255, 0.1)",
-                      },
-                      "&.Mui-disabled": {
-                        backgroundColor: "rgba(255, 99, 71, 0.2)",
-                        color: "text.primary",
-                        opacity: 1,
-                        borderColor: "rgba(255, 99, 71, 0.5)",
-                      },
-                    }}
-                  >
-                    {hour}:00
-                  </Button>
-                );
-              })}
-            </Box>
-            <Typography sx={{ mb: 6, color: "text.primary" }}>
-              {t("pricePerHour")}: {price} EUR
-            </Typography>
-            {selectedTimes.length > 0 && (
-              <Box
-                sx={{
-                  p: 2,
-                  boxSizing: "border-box",
-                  backgroundColor: "#d3bb8a",
-                  color: "#0f1621",
-                  borderRadius: 2,
-                  width: "100%",
-                  maxWidth: "500px",
-                }}
+          <Box sx={{ display: "flex", gap: 2 }}>
+            {/* Левая часть - Календарь и слоты */}
+            <Box sx={{ width: "50%" }}>
+              <LocalizationProvider
+                dateAdapter={AdapterDayjs}
+                adapterLocale={currentLang}
               >
-                <Typography>
-                  {t("estimatedPrice")}: {price * selectedTimes.length} EUR
-                </Typography>
-              </Box>
-            )}
-          </Box>
+                <DateCalendar
+                  value={selectedDate}
+                  onChange={(newDate) => setSelectedDate(newDate)}
+                  minDate={dayjs()}
+                  sx={{
+                    m: 0,
+                    "& .MuiPickersCalendarHeader-label": {
+                      color: "text.primary",
+                    },
+                    "& .MuiPickersDay-root.Mui-disabled": {
+                      color: "grey !important",
+                    },
+                    "& .MuiIconButton-root": {
+                      color: "text.primary",
+                      "&:hover": {
+                        backgroundColor: "rgba(255, 255, 255, 0.1)",
+                      },
+                    },
+                    "& .MuiPickersDay-root": {
+                      color: "text.primary",
+                      "&:hover": { bgcolor: "rgba(255, 255, 255, 0.1)" },
+                      "&.Mui-selected": {
+                        bgcolor: "#d3bb8a",
+                        color: "#0f1621",
+                        "&:hover": { bgcolor: "#b89f6e" },
+                      },
+                    },
+                  }}
+                />
+              </LocalizationProvider>
 
-          {/* Правая часть - Форма */}
-          <Box sx={{ width: "50%" }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              {t("bookingDetails")}
-            </Typography>
-
-            <TextField
-              fullWidth
-              required
-              placeholder={t("fullName")}
-              value={formData.fullname}
-              onChange={handleFormChange("fullname")}
-              sx={fieldStyle}
-            />
-            <TextField
-              fullWidth
-              placeholder={t("email")}
-              value={formData.email}
-              onChange={handleFormChange("email")}
-              sx={fieldStyle}
-            />
-            <TextField
-              fullWidth
-              placeholder={t("phone")}
-              value={formData.phone}
-              onChange={handleFormChange("phone")}
-              sx={fieldStyle}
-            />
-            <TextField
-              fullWidth
-              multiline
-              rows={2}
-              placeholder={t("description")}
-              value={formData.description}
-              onChange={handleFormChange("description")}
-              sx={fieldStyle}
-            />
-            <FormControl fullWidth>
-              <Select
-                sx={{
-                  backgroundColor: "background.light",
-                  color: "text.secondary",
-                  borderRadius: 1,
-                  mb: 2,
-                }}
-                MenuProps={{
-                  PaperProps: {
-                    sx: {
-                      bgcolor: "background.light",
-                      "& .MuiMenuItem-root": {
-                        color: "text.secondary",
+              <Box sx={{ mb: 1 }}>
+                {timeSlots.map((hour) => {
+                  const isBooked = isTimeSlotBooked(hour);
+                  const isSelected = selectedTimes.includes(hour);
+                  return (
+                    <Button
+                      key={hour}
+                      variant="outlined"
+                      disabled={isBooked}
+                      onClick={() => handleTimeSlotToggle(hour)}
+                      sx={{
+                        mr: 1,
+                        mb: 1,
+                        width: "80px",
+                        backgroundColor: isBooked
+                          ? "rgba(255, 99, 71, 0.2)"
+                          : isSelected
+                          ? "#d3bb8a"
+                          : "rgba(255, 255, 255, 0.1)",
+                        color: isSelected ? "#0f1621" : "text.primary",
+                        borderColor: isBooked
+                          ? "rgba(255, 99, 71, 0.5)"
+                          : "text.secondary",
                         "&:hover": {
-                          bgcolor: "rgba(255, 255, 255, 0.1)",
+                          backgroundColor: isBooked
+                            ? "rgba(255, 99, 71, 0.3)"
+                            : isSelected
+                            ? "#b89f6e"
+                            : "background.default",
+                          borderColor: isSelected
+                            ? "#b89f6e"
+                            : "rgba(255, 255, 255, 0.1)",
                         },
-                        "&.Mui-selected": {
-                          bgcolor: "#d3bb8a",
-                          color: "#0f1621",
+                        "&.Mui-disabled": {
+                          backgroundColor: "rgba(255, 99, 71, 0.2)",
+                          color: "text.primary",
+                          opacity: 1,
+                          borderColor: "rgba(255, 99, 71, 0.5)",
+                        },
+                      }}
+                    >
+                      {hour}:00
+                    </Button>
+                  );
+                })}
+              </Box>
+              <Typography sx={{ mb: 4, color: "text.primary" }}>
+                {t("pricePerHour")}: {price} EUR
+              </Typography>
+              {selectedTimes.length > 0 && (
+                <Box
+                  sx={{
+                    p: 2,
+                    boxSizing: "border-box",
+                    backgroundColor: "#d3bb8a",
+                    color: "#0f1621",
+                    borderRadius: 2,
+                    width: "100%",
+                    maxWidth: "500px",
+                  }}
+                >
+                  <Typography>
+                    {t("estimatedPrice")}: {price * selectedTimes.length} EUR
+                  </Typography>
+                </Box>
+              )}
+            </Box>
+
+            {/* Правая часть - Форма */}
+            <Box sx={{ width: "50%" }}>
+              <Typography variant="h6" sx={{ mb: 2 }}>
+                {t("bookingDetails")}
+              </Typography>
+
+              <TextField
+                fullWidth
+                required
+                placeholder={t("fullName")}
+                value={formData.fullname}
+                onChange={handleFormChange("fullname")}
+                sx={fieldStyle}
+              />
+              <TextField
+                fullWidth
+                placeholder={t("email")}
+                value={formData.email}
+                onChange={handleFormChange("email")}
+                sx={fieldStyle}
+              />
+              <TextField
+                fullWidth
+                placeholder={t("phone")}
+                value={formData.phone}
+                onChange={handleFormChange("phone")}
+                sx={fieldStyle}
+              />
+              <TextField
+                fullWidth
+                multiline
+                rows={2}
+                placeholder={t("description")}
+                value={formData.description}
+                onChange={handleFormChange("description")}
+                sx={fieldStyle}
+              />
+              <FormControl fullWidth>
+                <Select
+                  sx={{
+                    backgroundColor: "background.light",
+                    color: "text.secondary",
+                    borderRadius: 1,
+                    mb: 3,
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        bgcolor: "background.light",
+                        "& .MuiMenuItem-root": {
+                          color: "text.secondary",
                           "&:hover": {
-                            bgcolor: "#b89f6e",
+                            bgcolor: "rgba(255, 255, 255, 0.1)",
+                          },
+                          "&.Mui-selected": {
+                            bgcolor: "#d3bb8a",
+                            color: "#0f1621",
+                            "&:hover": {
+                              bgcolor: "#b89f6e",
+                            },
                           },
                         },
                       },
                     },
-                  },
-                }}
-                placeholder={t("insideOutside")}
-                value={formData.insideOutside}
-                onChange={handleFormChange("insideOutside")}
-              >
-                <MenuItem value="inside">{t("inside")}</MenuItem>
-                <MenuItem value="outside">{t("outside")}</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              fullWidth
-              placeholder={t("devicesCount")}
-              value={formData.devicesCount}
-              onChange={handleFormChange("devicesCount")}
-              sx={fieldStyle}
-            />
-            <TextField
-              fullWidth
-              placeholder={t("address")}
-              value={formData.address}
-              onChange={handleFormChange("address")}
-              sx={fieldStyle}
-            />
-
-            <Box sx={{ display: "flex", w: 1, justifyContent: "end" }}>
-              <MainButton onClick={handleSubmit} sx={{ mt: 2 }}>
-                {t("confirmBooking")}
-              </MainButton>
+                  }}
+                  placeholder={t("insideOutside")}
+                  value={formData.insideOutside}
+                  onChange={handleFormChange("insideOutside")}
+                >
+                  <MenuItem value="inside">{t("inside")}</MenuItem>
+                  <MenuItem value="outside">{t("outside")}</MenuItem>
+                </Select>
+              </FormControl>
+              <TextField
+                fullWidth
+                placeholder={t("devicesCount")}
+                value={formData.devicesCount}
+                onChange={handleFormChange("devicesCount")}
+                sx={fieldStyle}
+              />
+              <TextField
+                fullWidth
+                placeholder={t("address")}
+                value={formData.address}
+                onChange={handleFormChange("address")}
+                sx={fieldStyle}
+              />
             </Box>
+          </Box>
+          <Box sx={{ display: "flex", w: 1, justifyContent: "center" }}>
+            <MainButton onClick={handleSubmit} sx={{ mt: 2 }}>
+              {t("confirmBooking")}
+            </MainButton>
           </Box>
         </Box>
       </Modal>
