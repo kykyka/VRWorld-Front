@@ -31,9 +31,9 @@ const OutboundBooking = ({ initData }) => {
   const [success, setSuccess] = useState(false);
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [selectedTimes, setSelectedTimes] = useState([]);
-  const [price, setPrice] = useState(50);
-  const [availableHours, setAvailableHours] = useState({}); // Можно сделать динамическим
-  const [bookings, setBookings] = useState({}); // Здесь будут храниться занятые слоты
+  const [price] = useState(50);
+  const [availableHours, setAvailableHours] = useState({});
+  const [bookings, setBookings] = useState([]);
   const [formData, setFormData] = useState({
     fullname: "",
     email: "",
@@ -55,17 +55,16 @@ const OutboundBooking = ({ initData }) => {
   );
 
   useEffect(() => {
-    if (!open) return; // Не выполняем ничего, если модалка закрыта
+    if (!open) return;
 
     const initializeData = async () => {
       setLoading(true);
       if (initData && selectedDate.isSame(dayjs(), "day")) {
-        // Используем initData только для текущей даты при первом открытии
         setAvailableHours(initData.availableHours || { from: 12, to: 20 });
         setBookings(initData.bookings || []);
         setLoading(false);
       } else {
-        // Выполняем запрос к серверу для выбранной даты
+        setSelectedTimes([]);
         await fetchData();
       }
     };
@@ -106,7 +105,6 @@ const OutboundBooking = ({ initData }) => {
     }
   };
 
-  // Логика определения занятых слотов (включая соседние)
   const isTimeSlotBooked = (hour) => {
     return bookings.some((device) =>
       device.reservations.some(
@@ -158,7 +156,6 @@ const OutboundBooking = ({ initData }) => {
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (formData.email && !emailRegex.test(formData.email)) {
       alert(t("invalidEmail"));
       setBookIsLoading(false);
@@ -171,7 +168,6 @@ const OutboundBooking = ({ initData }) => {
       reservations: selectedTimes,
     };
 
-    console.log("Booking data:", bookingData);
     try {
       const baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:8000";
       const response = await fetch(`${baseURL}/reserve`, {
@@ -190,15 +186,13 @@ const OutboundBooking = ({ initData }) => {
         setBookings((prevBookings) => {
           const updatedBookings = [...prevBookings];
           if (updatedBookings.length > 0) {
-            // Добавляем слоты к первому устройству
             updatedBookings[0].reservations = [
               ...updatedBookings[0].reservations,
               ...selectedTimes,
             ];
           } else {
-            // Если устройств нет, создаем новое
             updatedBookings.push({
-              id: Date.now(), // Уникальный ID
+              id: Date.now(),
               name: "Outbound Device",
               reservations: [...selectedTimes],
             });
@@ -216,12 +210,12 @@ const OutboundBooking = ({ initData }) => {
           address: "",
         });
         setSuccess(true);
+        setBookIsLoading(false);
         setTimeout(() => {
           setOpen(false);
           setSuccess(false);
         }, 2000);
       }
-      setBookIsLoading(false);
     } catch (error) {
       console.error("Booking error:", error);
       setBookIsLoading(false);
@@ -230,11 +224,12 @@ const OutboundBooking = ({ initData }) => {
   };
 
   const fieldStyle = {
-    mb: 3,
+    mb: { xs: 2, md: 3 },
     "& .MuiInputBase-root": {
       backgroundColor: "background.light",
       color: "text.secondary",
       borderRadius: 1,
+      fontSize: { xs: "0.9rem", md: "1rem" },
     },
     "& .MuiInputBase-input": {
       color: "text.secondary",
@@ -243,13 +238,10 @@ const OutboundBooking = ({ initData }) => {
       borderColor: "text.secondary",
     },
     "&:hover .MuiOutlinedInput-notchedOutline": {
-      borderColor: "text.tertiary",
-    },
-    "&:hover .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#d3bb8a", // Коричневый бордер при ховере
+      borderColor: "#d3bb8a",
     },
     "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#d3bb8a", // Коричневый бордер при фокусе
+      borderColor: "#d3bb8a",
     },
   };
 
@@ -260,6 +252,9 @@ const OutboundBooking = ({ initData }) => {
         bgcolor: green[700],
       },
     }),
+    width: { xs: "100%", md: "auto" },
+    fontSize: { xs: "0.9rem", md: "1rem" },
+    py: 1,
   };
 
   return (
@@ -273,10 +268,12 @@ const OutboundBooking = ({ initData }) => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 800,
+            width: { xs: "90%", sm: "80%", md: 800 },
+            maxHeight: "95vh",
+            overflowY: "auto",
             bgcolor: "background.default",
             color: "text.primary",
-            p: 4,
+            p: { xs: 2, md: 4 },
             border: "1px solid #d3bb8a",
             borderRadius: 2,
             position: "relative",
@@ -286,8 +283,8 @@ const OutboundBooking = ({ initData }) => {
             onClick={() => setOpen(false)}
             sx={{
               position: "absolute",
-              top: 8,
-              right: 8,
+              top: { xs: 4, md: 8 },
+              right: { xs: 4, md: 8 },
               color: "text.primary",
               "&:hover": {
                 backgroundColor: "rgba(255, 255, 255, 0.1)",
@@ -296,9 +293,15 @@ const OutboundBooking = ({ initData }) => {
           >
             <CloseIcon />
           </IconButton>
-          <Box sx={{ display: "flex", gap: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              gap: { xs: 1, md: 2 },
+            }}
+          >
             {/* Левая часть - Календарь и слоты */}
-            <Box sx={{ width: "50%" }}>
+            <Box sx={{ width: { xs: "100%", md: "50%" } }}>
               <LocalizationProvider
                 dateAdapter={AdapterDayjs}
                 adapterLocale={currentLang}
@@ -311,6 +314,7 @@ const OutboundBooking = ({ initData }) => {
                     m: 0,
                     "& .MuiPickersCalendarHeader-label": {
                       color: "text.primary",
+                      fontSize: { xs: "1rem", md: "1.25rem" },
                     },
                     "& .MuiPickersDay-root.Mui-disabled": {
                       color: "grey !important",
@@ -323,6 +327,7 @@ const OutboundBooking = ({ initData }) => {
                     },
                     "& .MuiPickersDay-root": {
                       color: "text.primary",
+                      fontSize: { xs: "0.9rem", md: "1rem" },
                       "&:hover": { bgcolor: "rgba(255, 255, 255, 0.1)" },
                       "&.Mui-selected": {
                         bgcolor: "#d3bb8a",
@@ -342,13 +347,12 @@ const OutboundBooking = ({ initData }) => {
                     justifyContent: "center",
                     alignItems: "center",
                     minHeight: "160px",
-                    // py: 6,
                   }}
                 >
                   <GradientCircularProgress size={48} />
                 </Box>
               ) : (
-                <Box sx={{ mb: 1 }}>
+                <Box sx={{ mb: { xs: 1, md: 1 } }}>
                   {timeSlots.map((hour) => {
                     const isBooked = isTimeSlotBooked(hour);
                     const isSelected = selectedTimes.includes(hour);
@@ -359,9 +363,10 @@ const OutboundBooking = ({ initData }) => {
                         disabled={isBooked}
                         onClick={() => handleTimeSlotToggle(hour)}
                         sx={{
-                          mr: 1,
+                          mr: { xs: 0.5, md: 1 },
                           mb: 1,
-                          width: "80px",
+                          width: { xs: "70px", md: "80px" },
+                          fontSize: { xs: "0.8rem", md: "1rem" },
                           backgroundColor: isBooked
                             ? "rgba(255, 99, 71, 0.2)"
                             : isSelected
@@ -377,7 +382,9 @@ const OutboundBooking = ({ initData }) => {
                               : isSelected
                               ? "#b89f6e"
                               : "background.default",
-                            borderColor: isSelected
+                            borderColor: isBooked
+                              ? "rgba(255, 99, 71, 0.5)"
+                              : isSelected
                               ? "#b89f6e"
                               : "rgba(255, 255, 255, 0.1)",
                           },
@@ -395,22 +402,28 @@ const OutboundBooking = ({ initData }) => {
                   })}
                 </Box>
               )}
-              <Typography sx={{ mb: 4, color: "text.primary" }}>
+              <Typography
+                sx={{
+                  mb: { xs: 2, md: "27px" },
+                  color: "text.primary",
+                  fontSize: { xs: "0.9rem", md: "1rem" },
+                }}
+              >
                 {t("outboundPricePerHour")}: {price} EUR
               </Typography>
               {selectedTimes.length > 0 && (
                 <Box
                   sx={{
-                    p: 2,
+                    p: { xs: 1, md: 2 },
                     boxSizing: "border-box",
                     backgroundColor: "#d3bb8a",
                     color: "#0f1621",
                     borderRadius: 2,
                     width: "100%",
-                    maxWidth: "500px",
+                    maxWidth: { xs: "100%", md: "500px" },
                   }}
                 >
-                  <Typography>
+                  <Typography sx={{ fontSize: { xs: "0.9rem", md: "1rem" } }}>
                     {t("estimatedPrice")}: {price * selectedTimes.length} EUR
                   </Typography>
                 </Box>
@@ -418,8 +431,14 @@ const OutboundBooking = ({ initData }) => {
             </Box>
 
             {/* Правая часть - Форма */}
-            <Box sx={{ width: "50%" }}>
-              <Typography variant="h6" sx={{ mb: 2 }}>
+            <Box sx={{ width: { xs: "100%", md: "50%" } }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  mb: { xs: 1, md: 2 },
+                  fontSize: { xs: "1.2rem", md: "1.5rem" },
+                }}
+              >
                 {t("outboundBookingDetails")}
               </Typography>
 
@@ -460,7 +479,8 @@ const OutboundBooking = ({ initData }) => {
                     backgroundColor: "background.light",
                     color: "text.secondary",
                     borderRadius: 1,
-                    mb: 3,
+                    mb: { xs: 2, md: 3 },
+                    fontSize: { xs: "0.9rem", md: "1rem" },
                   }}
                   MenuProps={{
                     PaperProps: {
@@ -468,6 +488,7 @@ const OutboundBooking = ({ initData }) => {
                         bgcolor: "background.light",
                         "& .MuiMenuItem-root": {
                           color: "text.secondary",
+                          fontSize: { xs: "0.9rem", md: "1rem" },
                           "&:hover": {
                             bgcolor: "rgba(255, 255, 255, 0.1)",
                           },
@@ -511,6 +532,7 @@ const OutboundBooking = ({ initData }) => {
               display: "flex",
               justifyContent: "center",
               position: "relative",
+              mt: { xs: 2, md: 0 },
             }}
           >
             <MainButton
