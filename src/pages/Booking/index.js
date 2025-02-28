@@ -26,7 +26,7 @@ export const Booking = () => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [bookIsLoading, setBookIsLoading] = useState(false);
-  const [success, setSuccess] = React.useState(false);
+  const [success, setSuccess] = useState(false);
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [bookings, setBookings] = useState([]);
   const [selectedTimes, setSelectedTimes] = useState({});
