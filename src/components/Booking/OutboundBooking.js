@@ -54,24 +54,6 @@ const OutboundBooking = ({ initData }) => {
     (_, i) => availableHours.from + i
   );
 
-  useEffect(() => {
-    if (!open) return;
-
-    const initializeData = async () => {
-      setLoading(true);
-      if (initData && selectedDate.isSame(dayjs(), "day")) {
-        setAvailableHours(initData.availableHours || { from: 12, to: 20 });
-        setBookings(initData.bookings || []);
-        setLoading(false);
-      } else {
-        setSelectedTimes([]);
-        await fetchData();
-      }
-    };
-
-    initializeData();
-  }, [open, selectedDate, initData]);
-
   const fetchData = async () => {
     try {
       const dateStr = selectedDate.format("YYYY-MM-DD");
@@ -104,6 +86,24 @@ const OutboundBooking = ({ initData }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!open) return;
+
+    const initializeData = async () => {
+      setLoading(true);
+      if (initData && selectedDate.isSame(dayjs(), "day")) {
+        setAvailableHours(initData.availableHours || { from: 12, to: 20 });
+        setBookings(initData.bookings || []);
+        setLoading(false);
+      } else {
+        setSelectedTimes([]);
+        await fetchData();
+      }
+    };
+
+    initializeData();
+  }, [open, selectedDate, initData]);
 
   const isTimeSlotBooked = (hour) => {
     return bookings.some((device) =>
@@ -276,7 +276,6 @@ const OutboundBooking = ({ initData }) => {
             p: { xs: 2, md: 4 },
             border: "1px solid #d3bb8a",
             borderRadius: 2,
-            position: "relative",
           }}
         >
           <IconButton
