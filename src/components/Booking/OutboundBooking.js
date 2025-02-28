@@ -8,10 +8,12 @@ import {
   FormControl,
   Select,
   MenuItem,
+  IconButton,
 } from "@mui/material";
 import { green } from "@mui/material/colors";
 import GradientCircularProgress from "../../components/Loaders/GradientCircularProgress";
 import MainButton from "../../components/Buttons/MainButton";
+import CloseIcon from "@mui/icons-material/Close";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
@@ -277,8 +279,23 @@ const OutboundBooking = ({ initData }) => {
             p: 4,
             border: "1px solid #d3bb8a",
             borderRadius: 2,
+            position: "relative",
           }}
         >
+          <IconButton
+            onClick={() => setOpen(false)}
+            sx={{
+              position: "absolute",
+              top: 8,
+              right: 8,
+              color: "text.primary",
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+              },
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
           <Box sx={{ display: "flex", gap: 2 }}>
             {/* Левая часть - Календарь и слоты */}
             <Box sx={{ width: "50%" }}>
