@@ -142,10 +142,8 @@ export const Booking = () => {
     }
 
     const bookingData = {
+      ...userDetails,
       date: selectedDate.format("YYYY-MM-DD"),
-      name: userDetails.name,
-      description: userDetails.description,
-      email: userDetails.email,
       reservations: selectedTimes,
     };
 

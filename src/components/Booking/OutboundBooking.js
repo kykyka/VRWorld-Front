@@ -31,7 +31,7 @@ const OutboundBooking = () => {
   const [selectedTimes, setSelectedTimes] = useState([]);
   const [price, setPrice] = useState(50);
   const [availableHours, setAvailableHours] = useState({}); // Можно сделать динамическим
-  const [bookings, setBookings] = useState([]); // Здесь будут храниться занятые слоты
+  const [bookings, setBookings] = useState({}); // Здесь будут храниться занятые слоты
   const [formData, setFormData] = useState({
     fullname: "",
     email: "",
@@ -90,16 +90,16 @@ const OutboundBooking = () => {
   }, [open, selectedDate]);
 
   // Логика определения занятых слотов (включая соседние)
- const isTimeSlotBooked = (hour) => {
-   return bookings.some((device) =>
-     device.reservations.some(
-       (reservedHour) =>
-         reservedHour === hour ||
-         reservedHour === hour - 1 ||
-         reservedHour === hour + 1
-     )
-   );
- };
+  const isTimeSlotBooked = (hour) => {
+    return bookings.some((device) =>
+      device.reservations.some(
+        (reservedHour) =>
+          reservedHour === hour ||
+          reservedHour === hour - 1 ||
+          reservedHour === hour + 1
+      )
+    );
+  };
 
   const handleTimeSlotToggle = (hour) => {
     setSelectedTimes((prev) => {
@@ -116,41 +116,96 @@ const OutboundBooking = () => {
     setFormData({ ...formData, [field]: e.target.value });
   };
 
-  const handleBooking = () => {
+  const handleBooking = async () => {
+    if (!bookIsLoading) {
+      setSuccess(false);
+      setBookIsLoading(true);
+    }
+
     if (!formData.fullname) {
       alert(t("fullnameRequired"));
+      setBookIsLoading(false);
       return;
     }
+
     if (!formData.email && !formData.phone) {
       alert(t("emailOrPhoneRequired"));
+      setBookIsLoading(false);
       return;
     }
+
     if (selectedTimes.length === 0) {
       alert(t("pleaseSelectTimeSlots"));
+      setBookIsLoading(false);
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (formData.email && !emailRegex.test(formData.email)) {
+      alert(t("invalidEmail"));
+      setBookIsLoading(false);
       return;
     }
 
     const bookingData = {
       ...formData,
       date: selectedDate.format("YYYY-MM-DD"),
-      timeSlots: selectedTimes,
+      reservations: selectedTimes,
     };
 
     console.log("Booking data:", bookingData);
-    // Здесь можно добавить отправку данных на сервер
+    try {
+      const baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:8000";
+      const response = await fetch(`${baseURL}/reserve`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bookingData),
+      });
 
-    setBookings([...bookings, ...selectedTimes]);
-    setSelectedTimes([]);
-    setFormData({
-      fullname: "",
-      email: "",
-      phone: "",
-      description: "",
-      insideOutside: "inside",
-      devicesCount: "",
-      address: "",
-    });
-    setOpen(false);
+      if (!response.ok) {
+        setBookIsLoading(false);
+        throw new Error("Booking failed");
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        setBookings((prevBookings) => {
+          const updatedBookings = [...prevBookings];
+          if (updatedBookings.length > 0) {
+            // Добавляем слоты к первому устройству
+            updatedBookings[0].reservations = [
+              ...updatedBookings[0].reservations,
+              ...selectedTimes,
+            ];
+          } else {
+            // Если устройств нет, создаем новое
+            updatedBookings.push({
+              id: Date.now(), // Уникальный ID
+              name: "Outbound Device",
+              reservations: [...selectedTimes],
+            });
+          }
+          return updatedBookings;
+        });
+        setSelectedTimes([]);
+        setFormData({
+          fullname: "",
+          email: "",
+          phone: "",
+          description: "",
+          insideOutside: "inside",
+          devicesCount: "",
+          address: "",
+        });
+        setSuccess(true);
+      }
+      setBookIsLoading(false);
+    } catch (error) {
+      console.error("Booking error:", error);
+      setBookIsLoading(false);
+      alert(t("bookingError"));
+    }
   };
 
   const fieldStyle = {
