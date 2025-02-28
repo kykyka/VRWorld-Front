@@ -44,7 +44,8 @@ const LanguagePopover = () => {
     setOpen(false);
   };
 
-  const selectedOption = languageOptions[i18n.language];
+  const normalizedLanguage = i18n.language.split("-")[0];
+  const selectedOption = languageOptions[normalizedLanguage];
 
   return (
     <>
