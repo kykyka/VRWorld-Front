@@ -243,7 +243,7 @@ export const Booking = () => {
           </Typography>
           <Typography variant="subtitle1">{t("locationName")}</Typography>
         </Box>
-        <OutboundBooking />
+        <OutboundBooking initData={{ availableHours, bookings }} />
         {price && (
           <Typography
             variant="h6"
