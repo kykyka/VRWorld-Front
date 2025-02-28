@@ -239,7 +239,7 @@ const OutboundBooking = () => {
                 })}
               </Box>
               <Typography sx={{ mb: 4, color: "text.primary" }}>
-                {t("pricePerHour")}: {price} EUR
+                {t("outboundPricePerHour")}: {price} EUR
               </Typography>
               {selectedTimes.length > 0 && (
                 <Box
@@ -263,7 +263,7 @@ const OutboundBooking = () => {
             {/* Правая часть - Форма */}
             <Box sx={{ width: "50%" }}>
               <Typography variant="h6" sx={{ mb: 2 }}>
-                {t("bookingDetails")}
+                {t("outboundBookingDetails")}
               </Typography>
 
               <TextField
