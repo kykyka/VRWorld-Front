@@ -215,6 +215,12 @@ export const Booking = () => {
     "&:hover .MuiOutlinedInput-notchedOutline": {
       borderColor: "text.tertiary",
     },
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#d3bb8a", // Коричневый бордер при ховере
+    },
+    "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#d3bb8a", // Коричневый бордер при фокусе
+    },
   };
 
   return (

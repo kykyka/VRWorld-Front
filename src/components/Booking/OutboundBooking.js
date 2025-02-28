@@ -26,6 +26,7 @@ const OutboundBooking = () => {
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [selectedTimes, setSelectedTimes] = useState([]);
+  const [price, setPrice] = useState(50);
   const [availableHours] = useState({ from: 10, to: 20 }); // Можно сделать динамическим
   const [bookings, setBookings] = useState([]); // Здесь будут храниться занятые слоты
   const [formData, setFormData] = useState({
@@ -126,6 +127,12 @@ const OutboundBooking = () => {
     "&:hover .MuiOutlinedInput-notchedOutline": {
       borderColor: "text.tertiary",
     },
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#d3bb8a", // Коричневый бордер при ховере
+    },
+    "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#d3bb8a", // Коричневый бордер при фокусе
+    },
   };
 
   return (
@@ -160,6 +167,7 @@ const OutboundBooking = () => {
                 onChange={(newDate) => setSelectedDate(newDate)}
                 minDate={dayjs()}
                 sx={{
+                  m: 0,
                   "& .MuiPickersCalendarHeader-label": {
                     color: "text.primary",
                   },
@@ -185,7 +193,7 @@ const OutboundBooking = () => {
               />
             </LocalizationProvider>
 
-            <Box sx={{ mt: 2 }}>
+            <Box sx={{ mb: 2 }}>
               {timeSlots.map((hour) => {
                 const isBooked = isTimeSlotBooked(hour);
                 const isSelected = selectedTimes.includes(hour);
@@ -231,6 +239,26 @@ const OutboundBooking = () => {
                 );
               })}
             </Box>
+            <Typography sx={{ mb: 6, color: "text.primary" }}>
+              {t("pricePerHour")}: {price} EUR
+            </Typography>
+            {selectedTimes.length > 0 && (
+              <Box
+                sx={{
+                  p: 2,
+                  boxSizing: "border-box",
+                  backgroundColor: "#d3bb8a",
+                  color: "#0f1621",
+                  borderRadius: 2,
+                  width: "100%",
+                  maxWidth: "500px",
+                }}
+              >
+                <Typography>
+                  {t("estimatedPrice")}: {price * selectedTimes.length} EUR
+                </Typography>
+              </Box>
+            )}
           </Box>
 
           {/* Правая часть - Форма */}
@@ -278,6 +306,26 @@ const OutboundBooking = () => {
                   borderRadius: 1,
                   mb: 2,
                 }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      bgcolor: "background.light",
+                      "& .MuiMenuItem-root": {
+                        color: "text.secondary",
+                        "&:hover": {
+                          bgcolor: "rgba(255, 255, 255, 0.1)",
+                        },
+                        "&.Mui-selected": {
+                          bgcolor: "#d3bb8a",
+                          color: "#0f1621",
+                          "&:hover": {
+                            bgcolor: "#b89f6e",
+                          },
+                        },
+                      },
+                    },
+                  },
+                }}
                 placeholder={t("insideOutside")}
                 value={formData.insideOutside}
                 onChange={handleFormChange("insideOutside")}
@@ -301,9 +349,11 @@ const OutboundBooking = () => {
               sx={fieldStyle}
             />
 
-            <MainButton onClick={handleSubmit} sx={{ mt: 2 }}>
-              {t("confirmBooking")}
-            </MainButton>
+            <Box sx={{ display: "flex", w: 1, justifyContent: "end" }}>
+              <MainButton onClick={handleSubmit} sx={{ mt: 2 }}>
+                {t("confirmBooking")}
+              </MainButton>
+            </Box>
           </Box>
         </Box>
       </Modal>
