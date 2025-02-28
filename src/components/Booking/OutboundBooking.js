@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import {
   Box,
-  Grid,
   Button,
   Typography,
   TextField,
   Modal,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
 } from "@mui/material";
@@ -26,13 +24,13 @@ import dayjs from "dayjs";
 const OutboundBooking = () => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [bookIsLoading, setBookIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [selectedTimes, setSelectedTimes] = useState([]);
   const [price, setPrice] = useState(50);
-  const [availableHours] = useState({ from: 10, to: 20 }); // Можно сделать динамическим
+  const [availableHours, setAvailableHours] = useState({}); // Можно сделать динамическим
   const [bookings, setBookings] = useState([]); // Здесь будут храниться занятые слоты
   const [formData, setFormData] = useState({
     fullname: "",
@@ -54,15 +52,54 @@ const OutboundBooking = () => {
     (_, i) => availableHours.from + i
   );
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dateStr = selectedDate.format("YYYY-MM-DD");
+        const baseURL =
+          process.env.REACT_APP_BASE_URL || "http://localhost:8000";
+        const response = await fetch(`${baseURL}/day/${dateStr}`);
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const result = await response.json();
+        setAvailableHours(result.data.available_hours || { from: 12, to: 20 });
+        setBookings(result.data.devices || []);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data, using mock data:", error);
+        const mockResponse = {
+          data: {
+            available_hours: { from: 10, to: 20 },
+            devices: [
+              { id: 1, name: "Mock VR Device 1", reservations: [19] },
+              { id: 2, name: "Mock VR Device 2", reservations: [10] },
+              { id: 3, name: "Mock VR Device 3", reservations: [19] },
+              { id: 4, name: "Mock VR Device 4", reservations: [19] },
+            ],
+          },
+        };
+        setAvailableHours(mockResponse.data.available_hours);
+        setBookings(mockResponse.data.devices);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [open, selectedDate]);
+
   // Логика определения занятых слотов (включая соседние)
-  const isTimeSlotBooked = (hour) => {
-    return bookings.some(
-      (reservedHour) =>
-        reservedHour === hour ||
-        reservedHour === hour - 1 ||
-        reservedHour === hour + 1
-    );
-  };
+ const isTimeSlotBooked = (hour) => {
+   return bookings.some((device) =>
+     device.reservations.some(
+       (reservedHour) =>
+         reservedHour === hour ||
+         reservedHour === hour - 1 ||
+         reservedHour === hour + 1
+     )
+   );
+ };
 
   const handleTimeSlotToggle = (hour) => {
     setSelectedTimes((prev) => {
