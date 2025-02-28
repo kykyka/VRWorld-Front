@@ -20,6 +20,7 @@ import "dayjs/locale/ru";
 import "dayjs/locale/en";
 import dayjs from "dayjs";
 import GradientCircularProgress from "../../components/Loaders/GradientCircularProgress";
+import OutboundBooking from "../../components/Booking/OutboundBooking";
 
 export const Booking = () => {
   const { t } = useTranslation();
@@ -198,6 +199,24 @@ export const Booking = () => {
     }),
   };
 
+  const fieldStyle = {
+    mb: 2,
+    "& .MuiInputBase-root": {
+      backgroundColor: "background.light",
+      color: "text.secondary",
+      borderRadius: 1,
+    },
+    "& .MuiInputBase-input": {
+      color: "text.secondary",
+    },
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: "text.secondary",
+    },
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: "text.tertiary",
+    },
+  };
+
   return (
     <Box
       sx={{
@@ -220,6 +239,7 @@ export const Booking = () => {
           </Typography>
           <Typography variant="subtitle1">{t("locationName")}</Typography>
         </Box>
+        <OutboundBooking />
         {price && (
           <Typography
             variant="h6"
@@ -452,23 +472,7 @@ export const Booking = () => {
                 onChange={(e) =>
                   setUserDetails({ ...userDetails, name: e.target.value })
                 }
-                sx={{
-                  mb: 2,
-                  "& .MuiInputBase-root": {
-                    backgroundColor: "background.light",
-                    color: "text.secondary",
-                    borderRadius: 1,
-                  },
-                  "& .MuiInputBase-input": {
-                    color: "text.secondary",
-                  },
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "text.secondary",
-                  },
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "text.tertiary",
-                  },
-                }}
+                sx={fieldStyle}
               />
               <TextField
                 fullWidth
@@ -480,23 +484,7 @@ export const Booking = () => {
                     email: e.target.value,
                   });
                 }}
-                sx={{
-                  mb: 2,
-                  "& .MuiInputBase-root": {
-                    backgroundColor: "background.light",
-                    color: "text.secondary",
-                    borderRadius: 1,
-                  },
-                  "& .MuiInputBase-input": {
-                    color: "text.secondary",
-                  },
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "text.secondary",
-                  },
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "text.tertiary",
-                  },
-                }}
+                sx={fieldStyle}
               />
               <TextField
                 fullWidth
@@ -509,23 +497,7 @@ export const Booking = () => {
                     description: e.target.value,
                   })
                 }
-                sx={{
-                  mb: 2,
-                  "& .MuiInputBase-root": {
-                    backgroundColor: "background.light",
-                    color: "text.secondary",
-                    borderRadius: 1,
-                  },
-                  "& .MuiInputBase-input": {
-                    color: "text.secondary",
-                  },
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "text.secondary",
-                  },
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "text.tertiary",
-                  },
-                }}
+                sx={fieldStyle}
               />
               <Typography
                 variant="caption"
