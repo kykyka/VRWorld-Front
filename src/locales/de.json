@@ -42,5 +42,16 @@
   "gallery": "Galerie",
   "backToGames": "Zurück zu Spielen",
   "shooter": "Shooter",
-  "aktion": "Aktion"
+  "aktion": "Aktion",
+  "bookOutbound": "Extern Buchen",
+  "fullnameRequired": "Vollständiger Name ist erforderlich",
+  "emailOrPhoneRequired": "E-Mail oder Telefonnummer ist erforderlich",
+  "outboundBookingDetails": "Details zur externen Buchung",
+  "phone": "Telefon",
+  "insideOutside": "Innen/Außen",
+  "inside": "Innen",
+  "devicesCount": "Anzahl der Geräte",
+  "address": "Adresse",
+  "outboundPricePerHour": "Preis pro Stunde"
+
 }

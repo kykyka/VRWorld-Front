@@ -42,5 +42,15 @@
   "gallery": "Gallery",
   "backToGames": "Back to Games",
   "shooter": "Shooter",
-  "action": "Action"
+  "action": "Action",
+  "bookOutbound": "Book Outbound",
+  "fullnameRequired": "Full name is required",
+  "emailOrPhoneRequired": "Email or phone number is required",
+  "outboundBookingDetails": "Outbound Booking Details",
+  "phone": "Phone",
+  "insideOutside": "Inside/Outside",
+  "inside": "Inside",
+  "devicesCount": "Number of Devices",
+  "address": "Address",
+  "outboundPricePerHour": "Price per hour"
 }

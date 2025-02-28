@@ -42,5 +42,15 @@
   "gallery": "Галерея",
   "backToGames": "Назад к играм",
   "стрелалка": "Стрелалка",
-  "экшн": "Экшн"
+  "экшн": "Экшн",
+  "bookOutbound": "Забронировать выезд",
+  "fullnameRequired": "Требуется указать полное имя",
+  "emailOrPhoneRequired": "Требуется указать email или номер телефона",
+  "outboundBookingDetails": "Детали выездного бронирования",
+  "phone": "Телефон",
+  "insideOutside": "В помещении/На улице",
+  "inside": "В помещении",
+  "devicesCount": "Количество устройств",
+  "address": "Адрес",
+  "outboundPricePerHour": "Цена за час"
 }
