@@ -30,6 +30,7 @@ export const Booking = () => {
   const [bookings, setBookings] = useState([]);
   const [selectedTimes, setSelectedTimes] = useState({});
   const [availableHours, setAvailableHours] = useState({});
+  const [price, setPrice] = useState(null);
   const [userDetails, setUserDetails] = useState({
     name: "",
     description: "",
@@ -39,7 +40,7 @@ export const Booking = () => {
   // Прокрутка к началу страницы при загрузке
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []); 
+  }, []);
 
   const currentLang = localStorage.getItem("i18nextLng") || "de";
 
@@ -66,12 +67,14 @@ export const Booking = () => {
 
         const result = await response.json();
         setAvailableHours(result.data.available_hours || { from: 12, to: 20 });
+        setPrice(result.data.price);
         setBookings(result.data.devices || []);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data, using mock data:", error);
         const mockResponse = {
           data: {
+            price: 40,
             available_hours: { from: 10, to: 20 },
             devices: [
               { id: 1, name: "Mock VR Device 1", reservations: [19] },
@@ -83,6 +86,7 @@ export const Booking = () => {
         };
         setAvailableHours(mockResponse.data.available_hours);
         setBookings(mockResponse.data.devices);
+        setPrice(mockResponse.data.price);
         setLoading(false);
       }
     };
@@ -216,15 +220,17 @@ export const Booking = () => {
           </Typography>
           <Typography variant="subtitle1">{t("locationName")}</Typography>
         </Box>
-        <Typography
-          variant="h6"
-          sx={{
-            color: "#d3bb8a",
-            fontWeight: "bold",
-          }}
-        >
-          40 EUR / {t("hour")}
-        </Typography>
+        {price && (
+          <Typography
+            variant="h6"
+            sx={{
+              color: "#d3bb8a",
+              fontWeight: "bold",
+            }}
+          >
+            {price} EUR / {t("hour")}
+          </Typography>
+        )}
       </Box>
 
       <Box
@@ -565,7 +571,7 @@ export const Booking = () => {
                 )}
                 <Typography sx={{ fontSize: "0.9rem" }}>
                   {t("estimatedPrice")}:{" "}
-                  {40 * Object.values(selectedTimes).flat().length},-
+                  {price * Object.values(selectedTimes).flat().length},-
                 </Typography>
               </Box>
             )}
