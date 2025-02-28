@@ -199,6 +199,10 @@ const OutboundBooking = () => {
           address: "",
         });
         setSuccess(true);
+        setTimeout(() => {
+          setOpen(false);
+          setSuccess(false);
+        }, 2000);
       }
       setBookIsLoading(false);
     } catch (error) {
